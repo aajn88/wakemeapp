@@ -1,5 +1,16 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="condensedHorizontalMargin">8dp</dimen>
+    <dimen name="condensedVerticalMargin">8dp</dimen>
+    <dimen name="standardHorizontalMargin">16dp</dimen>
+    <dimen name="standardVerticalMargin">16dp</dimen>
+    <dimen name="extendedVerticalMargin">24dp</dimen>
+
+    <!-- Elevations -->
+    <dimen name="actionBarElevation">12dp</dimen>
+    <dimen name="cardRestingElevation">4dp</dimen>
+    <dimen name="cardRaisedElevation">8dp</dimen>
+
+    <!-- Cards -->
+    <dimen name="cardMinWidth">200dp</dimen>
 </resources>

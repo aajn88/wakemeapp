@@ -1,0 +1,26 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    provided('com.google.android:android:4.1.1.4')
+
+    compile project(":common")
+}
+
+repositories {
+    mavenCentral()
+    if (project.hasProperty("mavenLocal")) {
+        maven { url "${System.env.HOME}/.m2/repository" }
+    }
+    maven { url "file:///${System.env.ANDROID_HOME}/extras/android/m2repository" }
+}

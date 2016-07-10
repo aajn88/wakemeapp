@@ -1,11 +1,33 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="BaseTheme">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/black</item>
+
+        <item name="primaryLightAlpha">@color/black_87_percent</item>
+        <item name="secondaryLightAlpha">@color/black_54_percent</item>
+        <item name="thirdLightAlpha">@color/black_38_percent</item>
+        <item name="dividerLightAlpha">@color/black_12_percent</item>
     </style>
+
+    <!-- Base application theme. -->
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
+
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white_70_percent</item>
+
+    </style>
+
+    <style name="CardViewTheme" parent="CardView">
+        <item name="cardElevation">?attr/cardRestingElevation</item>
+    </style>styles.xml
 
 </resources>
