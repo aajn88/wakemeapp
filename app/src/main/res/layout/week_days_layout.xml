@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="horizontal"
+    tools:showIn="@layout/alarm_layout">
+
+    <com.doers.wakemeapp.custom_views.font.RobotoTextView
+        android:id="@+id/monday_rtv"
+        style="@style/WeekDayTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/monday_initial"/>
+
+    <com.doers.wakemeapp.custom_views.font.RobotoTextView
+        android:id="@+id/tuesday_rtv"
+        style="@style/WeekDayTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tuesday_initial"/>
+
+    <com.doers.wakemeapp.custom_views.font.RobotoTextView
+        android:id="@+id/wednesday_rtv"
+        style="@style/WeekDayTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wednesday_initial"/>
+
+    <com.doers.wakemeapp.custom_views.font.RobotoTextView
+        android:id="@+id/thursday_rtv"
+        style="@style/WeekDayTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/thursday_initial"/>
+
+    <com.doers.wakemeapp.custom_views.font.RobotoTextView
+        android:id="@+id/friday_rtv"
+        style="@style/WeekDayTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/friday_initial"/>
+
+    <com.doers.wakemeapp.custom_views.font.RobotoTextView
+        android:id="@+id/saturday_rtv"
+        style="@style/WeekDayTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/saturday_initial"/>
+
+    <com.doers.wakemeapp.custom_views.font.RobotoTextView
+        android:id="@+id/sunday_rtv"
+        style="@style/WeekDayTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sunday_initial"/>
+
+</LinearLayout>

@@ -26,4 +26,8 @@
         <item name="android:colorAccent">@color/white</item>
     </style>
 
+    <style name="WeekDayTheme" parent="WeekDayBaseTheme">
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
 </resources>

@@ -24,4 +24,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
 
     compile project(':persistence')
+
+    compile 'org.apache.commons:commons-lang3:3.4'
 }

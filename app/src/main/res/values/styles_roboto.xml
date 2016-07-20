@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Roboto Styles -->
+    <style name="TextViewStyle">
+        <item name="android:textColor">?attr/primaryLightAlpha</item>
+    </style>
+
+    <style name="Display4Style" parent="TextViewStyle">
+        <item name="android:textSize">112sp</item>
+        <item name="typeface">robotoLight</item>
+    </style>
+
+    <style name="Display3Style" parent="TextViewStyle">
+        <item name="android:textSize">56sp</item>
+        <item name="typeface">robotoRegular</item>
+    </style>
+
+    <style name="Display2Style" parent="TextViewStyle">
+        <item name="android:textSize">45sp</item>
+        <item name="typeface">robotoRegular</item>
+    </style>
+
+    <style name="Display1Style" parent="TextViewStyle">
+        <item name="android:textSize">34sp</item>
+        <item name="typeface">robotoRegular</item>
+    </style>
+
+    <style name="HeadlineStyle" parent="TextViewStyle">
+        <item name="android:textSize">24sp</item>
+        <item name="typeface">robotoRegular</item>
+    </style>
+
+    <style name="TitleStyle" parent="TextViewStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="typeface">robotoMedium</item>
+    </style>
+
+    <style name="SubheadingStyle" parent="TextViewStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="typeface">robotoRegular</item>
+    </style>
+
+    <style name="Body2Style" parent="TextViewStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="typeface">robotoMedium</item>
+    </style>
+
+    <style name="Body1Style" parent="TextViewStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="typeface">robotoRegular</item>
+    </style>
+
+    <style name="CaptionStyle" parent="TextViewStyle">
+        <item name="android:textSize">12sp</item>
+        <item name="typeface">robotoRegular</item>
+    </style>
+
+    <style name="ButtonTextStyle" parent="TextViewStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="typeface">robotoMedium</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+</resources>

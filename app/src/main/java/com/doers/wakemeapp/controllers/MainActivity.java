@@ -2,17 +2,24 @@ package com.doers.wakemeapp.controllers;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
 
 import com.doers.wakemeapp.R;
+import com.doers.wakemeapp.controllers.alarms.AlarmManagerActivity;
 import com.doers.wakemeapp.utils.AnimationUtils;
 
 import roboguice.activity.RoboActionBarActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 
+/**
+ * Main activity where splash is loaded
+ *
+ * @author <a href="mailto:aajn88@gmail.com">Antonio A. Jimenez N.</a>
+ */
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActionBarActivity {
 
@@ -64,7 +71,8 @@ public class MainActivity extends RoboActionBarActivity {
      * This method redirects to the right Activity depending if the session is active or not
      */
     private void redirectActivity() {
-        // TODO: Redirect to home activity
+        Intent alarmManagerIntent = new Intent(this, AlarmManagerActivity.class);
+        startActivity(alarmManagerIntent);
     }
 
     /**
