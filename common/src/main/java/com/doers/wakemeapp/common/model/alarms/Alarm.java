@@ -1,5 +1,6 @@
 package com.doers.wakemeapp.common.model.alarms;
 
+import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 
@@ -107,14 +108,14 @@ public class Alarm {
     /**
      * @return the playlist
      */
-    public Playlist getPlaylist() {
+    public com.doers.wakemeapp.common.model.audio.Playlist getPlaylist() {
         return playlist;
     }
 
     /**
      * @return playlist the playlist to set
      */
-    public void setPlaylist(Playlist playlist) {
+    public void setPlaylist(com.doers.wakemeapp.common.model.audio.Playlist playlist) {
         this.playlist = playlist;
     }
 }

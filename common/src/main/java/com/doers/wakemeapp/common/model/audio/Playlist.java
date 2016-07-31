@@ -1,6 +1,5 @@
-package com.doers.wakemeapp.common.model.alarms;
+package com.doers.wakemeapp.common.model.audio;
 
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 
 import java.util.List;
@@ -21,8 +20,7 @@ public class Playlist {
     private String name;
 
     /** Songs' path **/
-    @DatabaseField(canBeNull = false, dataType = DataType.SERIALIZABLE)
-    private List<String> songsPath;
+    private List<Song> songs;
 
     /**
      * @return the id
@@ -53,16 +51,16 @@ public class Playlist {
     }
 
     /**
-     * @return the songsPath
+     * @return the songs
      */
-    public List<String> getSongsPath() {
-        return songsPath;
+    public List<Song> getSongs() {
+        return songs;
     }
 
     /**
-     * @return songsPath the songsPath to set
+     * @return songs the songs to set
      */
-    public void setSongsPath(List<String> songsPath) {
-        this.songsPath = songsPath;
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
     }
 }

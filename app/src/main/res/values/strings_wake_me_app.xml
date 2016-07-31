@@ -2,7 +2,15 @@
 <resources>
 
     <!-- Generics -->
-    <string name="loco_description">Logo description</string>
+    <string name="logo_description">Logo description</string>
+    <string name="playlists">Playlists</string>
+    <string name="save">Save</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Error messages -->
+    <string name="mandatory_field">Don\'t forget this field</string>
+    <string name="empty_playlist_error">Please, add a playlist name</string>
 
     <!-- Week days -->
     <string name="monday_initial">M</string>
@@ -16,5 +24,12 @@
     <!-- Home Activity -->
     <string name="add_playlist">Add playlist</string>
     <string name="add_alarm">Add alarm</string>
+
+    <!-- Add playlist -->
+    <string name="playlist_name">Playlist name</string>
+
+    <!-- Add song -->
+    <string name="no_songs">You have no songs. Add the first one!</string>
+    <string name="type_song_title">Type song\'s title</string>
 
 </resources>

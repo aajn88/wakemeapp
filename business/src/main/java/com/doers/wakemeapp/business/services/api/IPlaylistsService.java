@@ -1,6 +1,7 @@
 package com.doers.wakemeapp.business.services.api;
 
-import com.doers.wakemeapp.common.model.alarms.Playlist;
+import com.doers.wakemeapp.common.model.audio.Playlist;
+import com.doers.wakemeapp.common.model.audio.Song;
 
 import java.util.List;
 
@@ -16,11 +17,32 @@ public interface IPlaylistsService {
      *
      * @param name
      *         Playlist name
-     * @param songsPath
+     * @param songs
      *         Selected songs for the playlist
      *
      * @return Created playlist. Returns null if an error occurred
      */
-    Playlist createPlaylist(String name, List<String> songsPath);
+    Playlist createPlaylist(String name, List<Song> songs);
+
+    /**
+     * This method updates an existing playlist
+     *
+     * @param playlistId
+     *         Playlist Id to be updated
+     * @param name
+     *         New playlist's name
+     * @param songs
+     *         New playlist's songs
+     *
+     * @return True if the playlist was updated. Otherwise returns False
+     */
+    boolean updatePlaylist(int playlistId, String name, List<Song> songs);
+
+    /**
+     * This method gets all stored playlists
+     *
+     * @return All stored playlists
+     */
+    List<Playlist> getAllPlaylists();
 
 }

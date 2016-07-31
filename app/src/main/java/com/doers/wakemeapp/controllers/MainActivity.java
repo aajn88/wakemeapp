@@ -9,19 +9,18 @@ import android.widget.ImageView;
 
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.controllers.alarms.AlarmManagerActivity;
+import com.doers.wakemeapp.controllers.common.BaseActivity;
+import com.doers.wakemeapp.di.components.DiComponent;
 import com.doers.wakemeapp.utils.AnimationUtils;
 
-import roboguice.activity.RoboActionBarActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
+import butterknife.BindView;
 
 /**
  * Main activity where splash is loaded
  *
  * @author <a href="mailto:aajn88@gmail.com">Antonio A. Jimenez N.</a>
  */
-@ContentView(R.layout.activity_main)
-public class MainActivity extends RoboActionBarActivity {
+public class MainActivity extends BaseActivity {
 
     /** Tag for logs **/
     private static final String TAG = MainActivity.class.getName();
@@ -36,15 +35,26 @@ public class MainActivity extends RoboActionBarActivity {
     private static final int SPLASH_DELAY = 2500;
 
     /** Logo Image View **/
-    @InjectView(R.id.logo_iv)
-    private ImageView mLogoIv;
+    @BindView(R.id.logo_iv)
+    ImageView mLogoIv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_main);
         init();
 
+    }
+
+    /**
+     * Injection component. This should be done if there are fields to be injected
+     *
+     * @param diComponent
+     *         Dependency injection
+     */
+    @Override
+    protected void injectComponent(DiComponent diComponent) {
+        diComponent.inject(this);
     }
 
     /**

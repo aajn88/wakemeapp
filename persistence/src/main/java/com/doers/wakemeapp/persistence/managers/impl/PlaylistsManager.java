@@ -1,10 +1,8 @@
 package com.doers.wakemeapp.persistence.managers.impl;
 
-import com.doers.wakemeapp.common.model.alarms.Playlist;
+import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.persistence.DatabaseHelper;
 import com.doers.wakemeapp.persistence.managers.api.IPlaylistsManager;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import java.sql.SQLException;
 
@@ -13,7 +11,6 @@ import java.sql.SQLException;
  *
  * @author <a href="mailto:aajn88@gmail.com">Antonio Jimenez</a>
  */
-@Singleton
 public class PlaylistsManager extends CrudManager<Playlist, Integer> implements IPlaylistsManager {
 
     /**
@@ -25,7 +22,6 @@ public class PlaylistsManager extends CrudManager<Playlist, Integer> implements 
      * @throws SQLException
      *         If there's an error creating the Entity's DAO
      */
-    @Inject
     public PlaylistsManager(DatabaseHelper helper) throws SQLException {
         super(helper, Playlist.class);
     }

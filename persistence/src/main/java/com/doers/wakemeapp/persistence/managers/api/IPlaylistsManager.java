@@ -1,6 +1,6 @@
 package com.doers.wakemeapp.persistence.managers.api;
 
-import com.doers.wakemeapp.common.model.alarms.Playlist;
+import com.doers.wakemeapp.common.model.audio.Playlist;
 
 /**
  * Exposed queries for playlists' manager

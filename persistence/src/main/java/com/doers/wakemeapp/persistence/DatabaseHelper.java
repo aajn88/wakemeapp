@@ -5,9 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.doers.wakemeapp.common.model.alarms.Alarm;
-import com.doers.wakemeapp.common.model.alarms.Playlist;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import com.doers.wakemeapp.common.model.audio.Playlist;
+import com.doers.wakemeapp.common.model.audio.Song;
 import com.j256.ormlite.android.AndroidConnectionSource;
 import com.j256.ormlite.android.AndroidDatabaseConnection;
 import com.j256.ormlite.android.DatabaseTableConfigUtil;
@@ -27,7 +26,6 @@ import java.sql.SQLException;
  *
  * @author <a href="mailto:antonio-jimenez@accionplus.com">Antonio A. Jimenez N.</a>
  */
-@Singleton
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     /** Logs Tag **/
@@ -37,7 +35,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String DB_NAME = "dbd_control.db";
 
     /** DB Version **/
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     /** The connection source **/
     protected AndroidConnectionSource connectionSource = new AndroidConnectionSource(this);
@@ -48,7 +46,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
      * @param context
      *         The application Context
      */
-    @Inject
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -129,6 +126,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(TAG_LOG, "DB onCreate");
 
             // List of tables to be created
+            TableUtils.createTable(connectionSource, Song.class);
             TableUtils.createTable(connectionSource, Playlist.class);
             TableUtils.createTable(connectionSource, Alarm.class);
 
@@ -177,6 +175,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             // Just in this case: Drop all tables and create the DB again
             TableUtils.dropTable(connectionSource, Alarm.class, true);
             TableUtils.dropTable(connectionSource, Playlist.class, true);
+            TableUtils.dropTable(connectionSource, Song.class, true);
 
             onCreate();
         } catch (SQLException e) {

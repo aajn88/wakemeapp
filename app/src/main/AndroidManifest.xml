@@ -2,20 +2,15 @@
 <manifest package="com.doers.wakemeapp"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
     <application
+        android:name=".di.WakeMeAppApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <meta-data
-            android:name="roboguice.modules"
-            android:value="com.doers.wakemeapp.config.ConfigurationModule"/>
-
-        <meta-data
-            android:name="roboguice.annotations.packages"
-            android:value="com.doers.wakemeapp"/>
 
         <activity android:name=".controllers.MainActivity">
             <intent-filter>
@@ -24,8 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".controllers.alarms.AlarmManagerActivity">
-        </activity>
+        <activity android:name=".controllers.alarms.AlarmManagerActivity"/>
+        <activity android:name=".controllers.playlists.PlaylistsManagerActivity"/>
+        <activity
+            android:name=".controllers.playlists.AddPlaylistActivity"
+            android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>
