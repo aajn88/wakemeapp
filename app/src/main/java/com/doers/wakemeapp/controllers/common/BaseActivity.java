@@ -1,9 +1,13 @@
 package com.doers.wakemeapp.controllers.common;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -56,6 +60,39 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected Activity getActivity() {
         return this;
+    }
+
+    /**
+     * This method shows a dialog to the user confirming to exit the activity without saving the
+     * progress
+     *
+     * @param context
+     *         Current context
+     * @param titleRes
+     *         Title to be shown. Could be null
+     * @param msgRes
+     *         Message to be shown. Could be null
+     * @param confirmRes
+     *         Confirmation string for confirmation button. Cannot be null
+     */
+    protected void confirmExit(Context context, @StringRes Integer titleRes,
+                               @StringRes Integer msgRes, @StringRes int confirmRes) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.StyledDialog);
+        if (titleRes != null) {
+            builder.setTitle(titleRes);
+        }
+        if (msgRes != null) {
+            builder.setMessage(msgRes);
+        }
+        builder.setCancelable(true).setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(confirmRes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }

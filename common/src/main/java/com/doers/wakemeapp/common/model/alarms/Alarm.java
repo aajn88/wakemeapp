@@ -19,9 +19,9 @@ public class Alarm {
     @DatabaseField(canBeNull = false)
     private String name;
 
-    /** Scheduled dates **/
+    /** Scheduled days **/
     @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false)
-    private boolean[] scheduledDates;
+    private boolean[] scheduledDays;
 
     /** Scheduled hour (0-23) **/
     @DatabaseField(canBeNull = false)
@@ -43,7 +43,8 @@ public class Alarm {
     }
 
     /**
-     * @return id the id to set
+     * @param id
+     *         the id to set
      */
     public void setId(Integer id) {
         this.id = id;
@@ -57,24 +58,26 @@ public class Alarm {
     }
 
     /**
-     * @return name the name to set
+     * @param name
+     *         the name to set
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * @return the scheduledDates
+     * @return the scheduledDays
      */
-    public boolean[] getScheduledDates() {
-        return scheduledDates;
+    public boolean[] getScheduledDays() {
+        return scheduledDays;
     }
 
     /**
-     * @return scheduledDates the scheduledDates to set
+     * @param scheduledDays
+     *         the scheduledDays to set
      */
-    public void setScheduledDates(boolean[] scheduledDates) {
-        this.scheduledDates = scheduledDates;
+    public void setScheduledDays(boolean[] scheduledDays) {
+        this.scheduledDays = scheduledDays;
     }
 
     /**
@@ -85,7 +88,8 @@ public class Alarm {
     }
 
     /**
-     * @return hour the hour to set
+     * @param hour
+     *         the hour to set
      */
     public void setHour(Integer hour) {
         this.hour = hour;
@@ -99,7 +103,8 @@ public class Alarm {
     }
 
     /**
-     * @return minute the minute to set
+     * @param minute
+     *         the minute to set
      */
     public void setMinute(Integer minute) {
         this.minute = minute;
@@ -108,14 +113,15 @@ public class Alarm {
     /**
      * @return the playlist
      */
-    public com.doers.wakemeapp.common.model.audio.Playlist getPlaylist() {
+    public Playlist getPlaylist() {
         return playlist;
     }
 
     /**
-     * @return playlist the playlist to set
+     * @param playlist
+     *         the playlist to set
      */
-    public void setPlaylist(com.doers.wakemeapp.common.model.audio.Playlist playlist) {
+    public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
     }
 }

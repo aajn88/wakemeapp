@@ -4,17 +4,21 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.doers.wakemeapp.R;
+import com.doers.wakemeapp.business.services.api.IAlarmsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
 import com.doers.wakemeapp.controllers.common.BaseActivity;
 import com.doers.wakemeapp.controllers.playlists.PlaylistsManagerActivity;
 import com.doers.wakemeapp.custom_views.decorations.InitialSpaceItemDecoration;
 import com.doers.wakemeapp.di.components.DiComponent;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 
@@ -37,6 +41,21 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
     @BindView(R.id.add_alarm_fab)
     FloatingActionButton mAddAlarmFab;
 
+    /** Floating Action Menu **/
+    @BindView(R.id.alarms_fam)
+    FloatingActionMenu mAlarmsFam;
+
+    /** No alarms TextView **/
+    @BindView(R.id.no_alarms_tv)
+    TextView mNoAlarmsTv;
+
+    /** Alarms Service **/
+    @Inject
+    IAlarmsService mAlarmsService;
+
+    /** Alarms adapter **/
+    private AlarmsAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,17 +64,18 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
         setTitle(R.string.app_name);
 
         mAddPlaylistFab.setOnClickListener(this);
+        mAddAlarmFab.setOnClickListener(this);
 
         mAlarmsRv.setLayoutManager(new LinearLayoutManager(this));
         mAlarmsRv.addItemDecoration(new InitialSpaceItemDecoration(
                 (int) getResources().getDimension(R.dimen.condensedVerticalMargin)));
 
-        List<Alarm> alarms = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            alarms.add(new Alarm());
+        List<Alarm> alarms = mAlarmsService.getAllAlarms();
+        if (alarms.isEmpty()) {
+            mNoAlarmsTv.setVisibility(View.VISIBLE);
         }
-        AlarmsAdapter adapter = new AlarmsAdapter(this, alarms);
-        mAlarmsRv.setAdapter(adapter);
+        mAdapter = new AlarmsAdapter(this, alarms);
+        mAlarmsRv.setAdapter(mAdapter);
     }
 
     /**
@@ -76,6 +96,8 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
                 PlaylistsManagerActivity.startActivity(this);
                 break;
             case R.id.add_alarm_fab:
+                mAdapter.addAlarm();
+                mNoAlarmsTv.setVisibility(View.GONE);
                 break;
         }
     }

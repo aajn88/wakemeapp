@@ -1,5 +1,6 @@
 package com.doers.wakemeapp.controllers.alarms;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -9,13 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.doers.wakemeapp.R;
+import com.doers.wakemeapp.business.services.api.IAlarmsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
 import com.doers.wakemeapp.custom_views.font.RobotoTextView;
+import com.doers.wakemeapp.di.WakeMeAppApplication;
+import com.doers.wakemeapp.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Adapter where all stored alarms will be displayed
@@ -28,31 +35,36 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     private static final int[] WEEKDAYS_IDS = {R.id.monday_rtv, R.id.tuesday_rtv,
             R.id.wednesday_rtv, R.id.thursday_rtv, R.id.friday_rtv, R.id.saturday_rtv,
             R.id.sunday_rtv};
-
     /** Layout Inflater **/
     private final LayoutInflater mInflater;
-
+    /** Current context **/
+    private final Context mContext;
     /** Alarms **/
     private final List<Alarm> mAlarms;
+    /** Alarms service **/
+    @Inject
+    IAlarmsService mAlarmsService;
 
     /**
      * Constructor
      *
-     * @param context
-     *         Application context
+     * @param activity
+     *         Current Activity
      */
-    public AlarmsAdapter(Context context, List<Alarm> alarms) {
-        mInflater = LayoutInflater.from(context);
+    public AlarmsAdapter(Activity activity, List<Alarm> alarms) {
+        mContext = activity;
+        mInflater = LayoutInflater.from(activity);
         mAlarms = new ArrayList<>(alarms);
+        ((WakeMeAppApplication) activity.getApplication()).getComponent().inject(this);
     }
 
     /**
      * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent an
      * item.
-     * <p/>
+     * <p>
      * This new ViewHolder should be constructed with a new View that can represent the items of the
      * given type. You can either create a new View manually or inflate it from an XML layout file.
-     * <p/>
+     * <p>
      * The new ViewHolder will be used to display items of the adapter using {@link
      * #onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display different
      * items in the data set, it is a good idea to cache references to sub views of the View to
@@ -78,14 +90,14 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
      * Called by RecyclerView to display the data at the specified position. This method should
      * update the contents of the {@link ViewHolder#itemView} to reflect the item at the given
      * position.
-     * <p/>
+     * <p>
      * Note that unlike {@link ListView}, RecyclerView will not call this method again if the
      * position of the item changes in the data set unless the item itself is invalidated or the new
      * position cannot be determined. For this reason, you should only use the <code>position</code>
      * parameter while acquiring the related data item inside this method and should not keep a copy
      * of it. If you need the position of an item later on (e.g. in a click listener), use {@link
      * ViewHolder#getAdapterPosition()} which will have the updated adapter position.
-     * <p/>
+     * <p>
      * Override {@link #onBindViewHolder(ViewHolder, int, List)} instead if Adapter can handle
      * effcient partial bind.
      *
@@ -97,7 +109,36 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        final AlarmHolder vh = (AlarmHolder) holder;
+        Alarm alarm = mAlarms.get(position);
 
+        final boolean[] scheduledDays = alarm.getScheduledDays();
+        for (int i = 0; i < scheduledDays.length; i++) {
+            updateDay(scheduledDays[i], vh.mDays[i]);
+            final int finalI = i;
+            vh.mDays[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    scheduledDays[finalI] = !scheduledDays[finalI];
+                    updateDay(scheduledDays[finalI], vh.mDays[finalI]);
+                }
+            });
+        }
+        vh.mTime.setText(
+                mContext.getString(R.string.time_format, alarm.getHour(), alarm.getMinute()));
+    }
+
+    private void updateDay(boolean scheduledDay, TextView tv) {
+        int colorRes = scheduledDay ? R.color.colorAccent : R.color.black_38_percent;
+        tv.setTextColor(ViewUtils.getColor(mContext, colorRes));
+    }
+
+    /**
+     * This method adds an alarm
+     */
+    public void addAlarm() {
+        mAlarms.add(mAlarmsService.getDefaultAlarm());
+        notifyItemInserted(mAlarms.size() - 1);
     }
 
     /**

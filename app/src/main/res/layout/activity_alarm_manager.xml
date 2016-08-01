@@ -18,6 +18,7 @@
         android:layout_below="@+id/toolbar"/>
 
     <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/alarms_fam"
         style="@style/FabTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,5 +44,15 @@
             fab:fab_label="@string/add_alarm"/>
 
     </com.github.clans.fab.FloatingActionMenu>
+
+    <com.doers.wakemeapp.custom_views.font.RobotoTextView
+        android:id="@+id/no_alarms_tv"
+        style="@style/SubheadingStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/no_alarms"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"/>
 
 </RelativeLayout>

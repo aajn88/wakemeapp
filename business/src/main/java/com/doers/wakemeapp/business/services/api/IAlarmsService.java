@@ -1,5 +1,9 @@
 package com.doers.wakemeapp.business.services.api;
 
+import com.doers.wakemeapp.common.model.alarms.Alarm;
+
+import java.util.List;
+
 /**
  * This is the interface where all alarms services are exposed
  *
@@ -7,6 +11,18 @@ package com.doers.wakemeapp.business.services.api;
  */
 public interface IAlarmsService {
 
+    /**
+     * This method gets all the stored alarms
+     *
+     * @return All stored alarms
+     */
+    List<Alarm> getAllAlarms();
 
+    /**
+     * This method creates a default alarm instance
+     *
+     * @return Default alarm
+     */
+    Alarm getDefaultAlarm();
 
 }

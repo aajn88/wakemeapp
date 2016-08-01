@@ -1,6 +1,6 @@
 package com.doers.wakemeapp.controllers.playlists;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -70,16 +70,16 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
     /**
      * This method starts Add Playlists Activity given a context
      *
-     * @param context
+     * @param activity
      *         Application context
      */
-    public static void startActivity(Context context) {
-        if (context == null) {
+    public static void startActivity(Activity activity, int requestCode) {
+        if (activity == null) {
             return;
         }
 
-        Intent intent = new Intent(context, AddPlaylistActivity.class);
-        context.startActivity(intent);
+        Intent intent = new Intent(activity, AddPlaylistActivity.class);
+        activity.startActivityForResult(intent, requestCode);
     }
 
     @Override
@@ -117,9 +117,13 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.check_item) {
-            savePlaylist();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.check_item:
+                savePlaylist();
+                return true;
+            case android.R.id.home:
+                confirmExit(this, null, R.string.discard_playlist_msg, R.string.discard);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -134,6 +138,8 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
         }
 
         mPlaylistsService.createPlaylist(mPlaylistNameEt.getText().toString(), mAdapter.getSongs());
+        setResult(RESULT_OK);
+        finish();
     }
 
     /**

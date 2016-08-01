@@ -96,7 +96,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
         Playlist playlist = mPlaylists.get(position);
 
         vh.mNameTv.setText(playlist.getName());
-        vh.mSongsNumberTv.setText(playlist.getSongs().size());
+        vh.mSongsNumberTv.setText(Integer.toString(playlist.getSongs().size()));
     }
 
     /**

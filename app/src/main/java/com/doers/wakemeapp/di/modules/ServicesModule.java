@@ -6,6 +6,7 @@ import com.doers.wakemeapp.business.services.api.IAlarmsService;
 import com.doers.wakemeapp.business.services.api.IPlaylistsService;
 import com.doers.wakemeapp.business.services.impl.AlarmsService;
 import com.doers.wakemeapp.business.services.impl.PlaylistsService;
+import com.doers.wakemeapp.persistence.managers.api.IAlarmsManager;
 import com.doers.wakemeapp.persistence.managers.api.IPlaylistsManager;
 import com.doers.wakemeapp.persistence.managers.api.ISongsManager;
 
@@ -40,8 +41,8 @@ public class ServicesModule {
      */
     @Provides
     @Singleton
-    public IAlarmsService alarmsService() {
-        return new AlarmsService();
+    public IAlarmsService alarmsService(IAlarmsManager alarmsManager) {
+        return new AlarmsService(alarmsManager);
     }
 
     /**
