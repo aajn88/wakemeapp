@@ -1,20 +1,28 @@
 package com.doers.wakemeapp.controllers.alarms;
 
 import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.business.services.api.IAlarmsService;
+import com.doers.wakemeapp.business.services.api.IPlaylistsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
+import com.doers.wakemeapp.common.model.audio.Playlist;
+import com.doers.wakemeapp.custom_views.common.TimePickerFragment;
 import com.doers.wakemeapp.custom_views.font.RobotoTextView;
 import com.doers.wakemeapp.di.WakeMeAppApplication;
 import com.doers.wakemeapp.utils.ViewUtils;
@@ -35,15 +43,26 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     private static final int[] WEEKDAYS_IDS = {R.id.monday_rtv, R.id.tuesday_rtv,
             R.id.wednesday_rtv, R.id.thursday_rtv, R.id.friday_rtv, R.id.saturday_rtv,
             R.id.sunday_rtv};
+
     /** Layout Inflater **/
     private final LayoutInflater mInflater;
+
     /** Current context **/
     private final Context mContext;
+
     /** Alarms **/
     private final List<Alarm> mAlarms;
+
     /** Alarms service **/
     @Inject
     IAlarmsService mAlarmsService;
+
+    /** Playlist Service **/
+    @Inject
+    IPlaylistsService mPlaylistsService;
+
+    /** List of available playlists **/
+    private List<Playlist> mPlaylists;
 
     /**
      * Constructor
@@ -110,7 +129,7 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final AlarmHolder vh = (AlarmHolder) holder;
-        Alarm alarm = mAlarms.get(position);
+        final Alarm alarm = mAlarms.get(position);
 
         final boolean[] scheduledDays = alarm.getScheduledDays();
         for (int i = 0; i < scheduledDays.length; i++) {
@@ -124,8 +143,79 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
                 }
             });
         }
+        updateTime(vh, alarm);
+        vh.mTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerFragment timePicker = TimePickerFragment
+                        .getInstance(alarm.getHour(), alarm.getMinute(),
+                                new TimePickerDialog.OnTimeSetListener() {
+                                    @Override
+                                    public void onTimeSet(TimePicker timePicker, int hour,
+                                                          int minute) {
+                                        alarm.setHour(hour);
+                                        alarm.setMinute(minute);
+                                        updateTime(vh, alarm);
+                                    }
+                                });
+                timePicker.show(((FragmentActivity) mContext).getSupportFragmentManager(),
+                        "timePicker");
+            }
+        });
+        setUpPlaylists(vh, alarm);
+    }
+
+    private void updateTime(AlarmHolder vh, Alarm alarm) {
         vh.mTime.setText(
                 mContext.getString(R.string.time_format, alarm.getHour(), alarm.getMinute()));
+    }
+
+    /**
+     * This method sets up the playlists for the current view holder and alarm
+     *
+     * @param vh
+     *         View Holder
+     * @param alarm
+     *         Alarm
+     */
+    private void setUpPlaylists(final AlarmHolder vh, final Alarm alarm) {
+        List<Playlist> playlists = getPlaylists();
+        vh.mPlaylists.setAdapter(
+                new ArrayAdapter<Playlist>(mContext, R.layout.list_item_simple, R.id.text_rtv,
+                        playlists));
+        int foundIndex = -1;
+        vh.mPlaylists.setOnItemSelectedListener(null);
+        for (int i = 0; i < playlists.size() && foundIndex == -1; i++) {
+            Playlist playlist = playlists.get(i);
+            if (alarm.getPlaylist() == null ||
+                    playlist.getId().equals(alarm.getPlaylist().getId())) {
+                storePlaylist(alarm, playlist);
+                foundIndex = i;
+            }
+        }
+        vh.mPlaylists.setSelection(foundIndex);
+        vh.mPlaylists.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                storePlaylist(alarm, (Playlist) vh.mPlaylists.getItemAtPosition(i));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+    }
+
+    /**
+     * This method stores the playlist to the given alarm. The playlist is attached to the alarm
+     *
+     * @param alarm
+     *         Alarm owner of the playlist
+     * @param playlist
+     *         Playlist to be stored and attached to the alarm
+     */
+    private void storePlaylist(Alarm alarm, Playlist playlist) {
+        alarm.setPlaylist(playlist);
+        mAlarmsService.createOrUpdateAlarm(alarm);
     }
 
     private void updateDay(boolean scheduledDay, TextView tv) {
@@ -149,6 +239,18 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return mAlarms.size();
+    }
+
+    /**
+     * This method gets the available playlists
+     *
+     * @return List of available playlists
+     */
+    public List<Playlist> getPlaylists() {
+        if (mPlaylists == null) {
+            mPlaylists = mPlaylistsService.getAllPlaylists();
+        }
+        return mPlaylists;
     }
 
     /**

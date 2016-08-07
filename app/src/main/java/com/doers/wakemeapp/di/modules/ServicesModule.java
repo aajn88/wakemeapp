@@ -41,8 +41,8 @@ public class ServicesModule {
      */
     @Provides
     @Singleton
-    public IAlarmsService alarmsService(IAlarmsManager alarmsManager) {
-        return new AlarmsService(alarmsManager);
+    public IAlarmsService alarmsService(Context context, IAlarmsManager alarmsManager) {
+        return new AlarmsService(context, alarmsManager);
     }
 
     /**

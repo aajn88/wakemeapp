@@ -63,4 +63,9 @@ public class Playlist {
     public void setSongs(List<Song> songs) {
         this.songs = songs;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

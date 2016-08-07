@@ -12,6 +12,14 @@ import java.util.List;
 public interface IAlarmsService {
 
     /**
+     * This method creates or updates an alarm
+     *
+     * @param alarm
+     *         Alarm to be created or updated
+     */
+    void createOrUpdateAlarm(Alarm alarm);
+
+    /**
      * This method gets all the stored alarms
      *
      * @return All stored alarms
