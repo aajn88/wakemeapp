@@ -26,84 +26,84 @@ import butterknife.BindView;
  */
 public class PlaylistsManagerActivity extends BaseActivity implements View.OnClickListener {
 
-    /** Add playlist request code **/
-    private static final int ADD_PLAYLIST_REQUEST_CODE = 316;
+  /** Add playlist request code **/
+  private static final int ADD_PLAYLIST_REQUEST_CODE = 316;
 
-    /** Playlists RecyclerView **/
-    @BindView(R.id.playlists_rv)
-    RecyclerView mPlaylistsRv;
+  /** Playlists RecyclerView **/
+  @BindView(R.id.playlists_rv)
+  RecyclerView mPlaylistsRv;
 
-    /** Add playlist FAB **/
-    @BindView(R.id.add_playlist_fab)
-    FloatingActionButton mAddPlaylistFab;
+  /** Add playlist FAB **/
+  @BindView(R.id.add_playlist_fab)
+  FloatingActionButton mAddPlaylistFab;
 
-    /** Playlist Service **/
-    @Inject
-    IPlaylistsService mPlaylistsService;
+  /** Playlist Service **/
+  @Inject
+  IPlaylistsService mPlaylistsService;
 
-    /**
-     * This method starts Playlists Manager Activity given a context
-     *
-     * @param context
-     *         Application context
-     */
-    public static void startActivity(Context context) {
-        if (context == null) {
-            return;
-        }
-
-        Intent intent = new Intent(context, PlaylistsManagerActivity.class);
-        context.startActivity(intent);
+  /**
+   * This method starts Playlists Manager Activity given a context
+   *
+   * @param context
+   *         Application context
+   */
+  public static void startActivity(Context context) {
+    if (context == null) {
+      return;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_playlists_manager);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(R.string.playlists);
+    Intent intent = new Intent(context, PlaylistsManagerActivity.class);
+    context.startActivity(intent);
+  }
 
-        mAddPlaylistFab.setOnClickListener(this);
-        mPlaylistsRv.setLayoutManager(new LinearLayoutManager(this));
-        mPlaylistsRv.setAdapter(new PlaylistsAdapter(this, mPlaylistsService.getAllPlaylists()));
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_playlists_manager);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    setTitle(R.string.playlists);
+
+    mAddPlaylistFab.setOnClickListener(this);
+    mPlaylistsRv.setLayoutManager(new LinearLayoutManager(this));
+    mPlaylistsRv.setAdapter(new PlaylistsAdapter(this, mPlaylistsService.getAllPlaylists()));
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case android.R.id.home:
+        finish();
+        return true;
     }
+    return super.onOptionsItemSelected(item);
+  }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+  /**
+   * Injection component. This should be done if there are fields to be injected
+   *
+   * @param diComponent
+   *         Dependency injection
+   */
+  @Override
+  protected void injectComponent(DiComponent diComponent) {
+    diComponent.inject(this);
+  }
+
+  @Override
+  public void onClick(View view) {
+    switch (view.getId()) {
+      case R.id.add_playlist_fab:
+        AddPlaylistActivity.startActivity(this, ADD_PLAYLIST_REQUEST_CODE);
+        break;
     }
+  }
 
-    /**
-     * Injection component. This should be done if there are fields to be injected
-     *
-     * @param diComponent
-     *         Dependency injection
-     */
-    @Override
-    protected void injectComponent(DiComponent diComponent) {
-        diComponent.inject(this);
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == ADD_PLAYLIST_REQUEST_CODE && resultCode == RESULT_OK) {
+      Snackbar.make(mPlaylistsRv, R.string.playlist_created, Snackbar.LENGTH_SHORT).show();
     }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.add_playlist_fab:
-                AddPlaylistActivity.startActivity(this, ADD_PLAYLIST_REQUEST_CODE);
-                break;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == ADD_PLAYLIST_REQUEST_CODE && resultCode == RESULT_OK) {
-            Snackbar.make(mPlaylistsRv, R.string.playlist_created, Snackbar.LENGTH_SHORT).show();
-        }
-    }
+  }
 }

@@ -21,55 +21,58 @@ import dagger.Provides;
 @Module
 public class ServicesModule {
 
-    /** Context to be injected into dependencies **/
-    private final Context mContext;
+  /** Context to be injected into dependencies **/
+  private final Context mContext;
 
-    /**
-     * Services Module constructor
-     *
-     * @param context
-     *         Application context
-     */
-    public ServicesModule(Context context) {
-        mContext = context;
-    }
+  /**
+   * Services Module constructor
+   *
+   * @param context
+   *         Application context
+   */
+  public ServicesModule(Context context) {
+    mContext = context;
+  }
 
-    /**
-     * Bind of the {@link IAlarmsService} with its implementation
-     *
-     * @return Alarms Service implementation
-     */
-    @Provides
-    @Singleton
-    public IAlarmsService alarmsService(Context context, IAlarmsManager alarmsManager) {
-        return new AlarmsService(context, alarmsManager);
-    }
+  /**
+   * Bind of the {@link IAlarmsService} with its implementation
+   *
+   * @return Alarms Service implementation
+   */
+  @Provides
+  @Singleton
+  public IAlarmsService alarmsService(Context context, IAlarmsManager alarmsManager,
+                                      IPlaylistsService playlistsService) {
+    return new AlarmsService(context, alarmsManager, playlistsService);
+  }
 
-    /**
-     * Bind of the {@link IPlaylistsService} with its implementation
-     *
-     * @param playlistsManager
-     *         Instance of Playlists Manager
-     * @param songsManager
-     *         Instance of Songs Manager
-     *
-     * @return Playlists Service implementation
-     */
-    @Provides
-    @Singleton
-    public IPlaylistsService playlistsService(IPlaylistsManager playlistsManager,
-                                              ISongsManager songsManager) {
-        return new PlaylistsService(playlistsManager, songsManager);
-    }
+  /**
+   * Bind of the {@link IPlaylistsService} with its implementation
+   *
+   * @param context
+   *         Application context
+   * @param playlistsManager
+   *         Instance of Playlists Manager
+   * @param songsManager
+   *         Instance of Songs Manager
+   *
+   * @return Playlists Service implementation
+   */
+  @Provides
+  @Singleton
+  public IPlaylistsService playlistsService(Context context, IPlaylistsManager playlistsManager,
+                                            ISongsManager songsManager) {
+    return new PlaylistsService(context, playlistsManager, songsManager);
+  }
 
-    /**
-     * Injection of the application context
-     *
-     * @return Application context
-     */
-    @Provides
-    public Context context() {
-        return mContext;
-    }
+  /**
+   * Injection of the application context
+   *
+   * @return Application context
+   */
+  @Provides
+  public Context context() {
+    return mContext;
+  }
 
 }

@@ -11,14 +11,14 @@ import java.util.List;
  */
 public interface ISongsManager extends ICrudManager<Song, Integer> {
 
-    /**
-     * This method finds the playlist's songs given its ID
-     *
-     * @param playlistId
-     *         Requested playlist ID
-     *
-     * @return List of songs that match with the playlist ID
-     */
-    List<Song> findByPlaylistId(int playlistId);
+  /**
+   * This method finds the playlist's songs given its ID
+   *
+   * @param playlistId
+   *         Requested playlist ID
+   *
+   * @return List of songs that match with the playlist ID
+   */
+  List<Song> findByPlaylistId(int playlistId);
 
 }

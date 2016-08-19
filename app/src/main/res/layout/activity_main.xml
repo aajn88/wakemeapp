@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:paddingBottom="@dimen/standardVerticalMargin"
-    android:paddingLeft="@dimen/standardHorizontalMargin"
-    android:paddingRight="@dimen/standardHorizontalMargin"
-    android:paddingTop="@dimen/standardVerticalMargin"
-    tools:context="com.doers.wakemeapp.controllers.MainActivity">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:paddingBottom="@dimen/standardVerticalMargin"
+                android:paddingLeft="@dimen/standardHorizontalMargin"
+                android:paddingRight="@dimen/standardHorizontalMargin"
+                android:paddingTop="@dimen/standardVerticalMargin"
+                tools:context="com.doers.wakemeapp.controllers.MainActivity">
 
     <ImageView
         android:id="@+id/logo_iv"

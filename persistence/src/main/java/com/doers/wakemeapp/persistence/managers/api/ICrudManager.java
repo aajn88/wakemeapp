@@ -11,54 +11,54 @@ import java.util.List;
  */
 public interface ICrudManager<Entity, Id> {
 
-    /**
-     * Creates or Updates the given entity. If the given entity is using auto-generated Id, then
-     * this will be loaded into the instance
-     *
-     * @param entity
-     *         Entity instance to be created or updated into the DB
-     *
-     * @return True if the entity was created/updated. False otherwise
-     */
-    boolean createOrUpdate(Entity entity);
+  /**
+   * Creates or Updates the given entity. If the given entity is using auto-generated Id, then
+   * this will be loaded into the instance
+   *
+   * @param entity
+   *         Entity instance to be created or updated into the DB
+   *
+   * @return True if the entity was created/updated. False otherwise
+   */
+  boolean createOrUpdate(Entity entity);
 
-    /**
-     * Finds an element of the Entity given its Id
-     *
-     * @param id
-     *         Entity's Id
-     *
-     * @return If there's a match, the Entity element is returned. Otherwise returns null
-     */
-    Entity findById(Id id);
+  /**
+   * Finds an element of the Entity given its Id
+   *
+   * @param id
+   *         Entity's Id
+   *
+   * @return If there's a match, the Entity element is returned. Otherwise returns null
+   */
+  Entity findById(Id id);
 
-    /**
-     * Returns a list of all stored elements of the Entity in the DB
-     *
-     * @return List of all stored elements of the Entity in the DB
-     */
-    List<Entity> all();
+  /**
+   * Returns a list of all stored elements of the Entity in the DB
+   *
+   * @return List of all stored elements of the Entity in the DB
+   */
+  List<Entity> all();
 
-    /**
-     * Deletes an Entity from the DB given its Id. Returns the deleted entity
-     *
-     * @param id
-     *         Entity's Id to be deleted
-     *
-     * @return The deleted Entity element
-     */
-    Entity deleteById(Id id);
+  /**
+   * Deletes an Entity from the DB given its Id. Returns the deleted entity
+   *
+   * @param id
+   *         Entity's Id to be deleted
+   *
+   * @return The deleted Entity element
+   */
+  Entity deleteById(Id id);
 
-    /**
-     * This method deletes all Table content
-     */
-    void deleteAll();
+  /**
+   * This method deletes all Table content
+   */
+  void deleteAll();
 
-    /**
-     * Returns the Entity DAO. This should be used to add custom queries
-     *
-     * @return Entity's DAO
-     */
-    Dao<Entity, Id> getDao();
+  /**
+   * Returns the Entity DAO. This should be used to add custom queries
+   *
+   * @return Entity's DAO
+   */
+  Dao<Entity, Id> getDao();
 
 }

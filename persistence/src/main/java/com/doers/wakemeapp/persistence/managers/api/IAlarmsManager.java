@@ -7,4 +7,5 @@ import com.doers.wakemeapp.common.model.alarms.Alarm;
  *
  * @author <a href="mailto:aajn88@gmail.com">Antonio Jimenez</a>
  */
-public interface IAlarmsManager extends ICrudManager<Alarm, Integer> {}
+public interface IAlarmsManager extends ICrudManager<Alarm, Integer> {
+}

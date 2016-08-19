@@ -2,4 +2,9 @@
     <string name="app_name">Business</string>
 
     <string name="playlist_default_title">Title</string>
+
+    <!-- Default values -->
+    <string name="default_playlist_name">Default playlist</string>
+    <string name="default_song_name">Default alarm</string>
+
 </resources>

@@ -1,6 +1,12 @@
 package com.doers.wakemeapp.business.services.impl;
 
+import android.content.Context;
+import android.media.RingtoneManager;
+import android.net.Uri;
+
+import com.doers.wakemeapp.business.R;
 import com.doers.wakemeapp.business.services.api.IPlaylistsService;
+import com.doers.wakemeapp.business.utils.IOUtils;
 import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.common.model.audio.Song;
 import com.doers.wakemeapp.persistence.managers.api.IPlaylistsManager;
@@ -8,6 +14,7 @@ import com.doers.wakemeapp.persistence.managers.api.ISongsManager;
 
 import org.apache.commons.lang3.Validate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,121 +24,166 @@ import java.util.List;
  */
 public class PlaylistsService implements IPlaylistsService {
 
-    /** Playlists manager **/
-    private final IPlaylistsManager mPlaylistsManager;
+  /** Application context **/
+  private final Context mContext;
 
-    /** Songs manager **/
-    private final ISongsManager mSongsManager;
+  /** Playlists manager **/
+  private final IPlaylistsManager mPlaylistsManager;
 
-    /**
-     * Playlists Service constructor
-     *
-     * @param playlistsManager
-     *         Playlists Manager
-     * @param songsManager
-     *         Songs Manager
-     */
-    public PlaylistsService(IPlaylistsManager playlistsManager, ISongsManager songsManager) {
-        this.mPlaylistsManager = playlistsManager;
-        this.mSongsManager = songsManager;
+  /** Songs manager **/
+  private final ISongsManager mSongsManager;
+
+  /**
+   * Playlists Service constructor
+   *
+   * @param context
+   *         Application context
+   * @param playlistsManager
+   *         Playlists Manager
+   * @param songsManager
+   *         Songs Manager
+   */
+  public PlaylistsService(Context context, IPlaylistsManager playlistsManager,
+                          ISongsManager songsManager) {
+    this.mContext = context;
+    this.mPlaylistsManager = playlistsManager;
+    this.mSongsManager = songsManager;
+    createDefaultPlaylist();
+  }
+
+  /**
+   * This method creates a playlist given its name and its songs
+   *
+   * @param name
+   *         Playlist name
+   * @param songs
+   *         Selected songs for the playlist
+   *
+   * @return Created playlist. Returns null if an error occurred
+   */
+  @Override
+  public Playlist createPlaylist(String name, List<Song> songs) {
+    return createPlaylist(name, songs, false);
+  }
+
+  /**
+   * This method creates a playlist given its name and its songs
+   *
+   * @param name
+   *         Playlist name
+   * @param songs
+   *         Selected songs for the playlist
+   *
+   * @return Created playlist. Returns null if an error occurred
+   */
+  private Playlist createPlaylist(String name, List<Song> songs, boolean isDefault) {
+    validatePlaylistFields(name, songs);
+
+    Playlist playlist = new Playlist();
+    playlist.setName(name);
+    playlist.setSongs(songs);
+    playlist.setDefault(isDefault);
+    boolean success = mPlaylistsManager.createOrUpdate(playlist);
+    if (success) {
+      persistSongs(songs, playlist);
     }
 
-    /**
-     * This method creates a playlist given its name and its songs
-     *
-     * @param name
-     *         Playlist name
-     * @param songs
-     *         Selected songs for the playlist
-     *
-     * @return Created playlist. Returns null if an error occurred
-     */
-    @Override
-    public Playlist createPlaylist(String name, List<Song> songs) {
-        validatePlaylistFields(name, songs);
+    return success ? playlist : null;
+  }
 
-        Playlist playlist = new Playlist();
-        playlist.setName(name);
-        playlist.setSongs(songs);
-        boolean success = mPlaylistsManager.createOrUpdate(playlist);
-        if (success) {
-            persistSongs(songs, playlist);
-        }
+  /**
+   * This method persists songs list
+   *
+   * @param songs
+   *         Songs to be persisted
+   * @param playlist
+   *         Owner playlist
+   */
+  private void persistSongs(List<Song> songs, Playlist playlist) {
+    for (Song song : songs) {
+      song.setPlaylist(playlist);
+      mSongsManager.createOrUpdate(song);
+    }
+  }
 
-        return success ? playlist : null;
+  /**
+   * This method validates the playlist's fields
+   *
+   * @param name
+   *         Playlist name
+   * @param songs
+   *         Playlist songs
+   */
+  private void validatePlaylistFields(String name, List<Song> songs) {
+    Validate.notNull(name, "Playlist name cannot be null");
+    Validate.notNull(name, "Playlist's songs path cannot be null");
+    Validate.isTrue(!name.trim().isEmpty(), "Playlist name cannot be empty");
+    Validate.isTrue(!songs.isEmpty(), "Playlist's songs path name cannot be empty");
+  }
+
+  /**
+   * This method updates an existing playlist
+   *
+   * @param playlistId
+   *         Playlist Id to be updated
+   * @param name
+   *         New playlist's name
+   * @param songs
+   *         New playlist's songs
+   *
+   * @return True if the playlist was updated. Otherwise returns False
+   */
+  @Override
+  public boolean updatePlaylist(int playlistId, String name, List<Song> songs) {
+    Playlist playlist = mPlaylistsManager.findById(playlistId);
+    if (playlist == null) {
+      return false;
     }
 
-    /**
-     * This method persists songs list
-     *
-     * @param songs
-     *         Songs to be persisted
-     * @param playlist
-     *         Owner playlist
-     */
-    private void persistSongs(List<Song> songs, Playlist playlist) {
-        for (Song song : songs) {
-            song.setPlaylist(playlist);
-            mSongsManager.createOrUpdate(song);
-        }
+    validatePlaylistFields(name, songs);
+
+    playlist.setName(name);
+    playlist.setSongs(songs);
+
+    return mPlaylistsManager.createOrUpdate(playlist);
+  }
+
+  /**
+   * This method gets all stored playlists
+   *
+   * @return All stored playlists
+   */
+  @Override
+  public List<Playlist> getAllPlaylists() {
+    List<Playlist> playlists = mPlaylistsManager.all();
+
+    for (Playlist playlist : playlists) {
+      playlist.setSongs(mSongsManager.findByPlaylistId(playlist.getId()));
     }
 
-    /**
-     * This method validates the playlist's fields
-     *
-     * @param name
-     *         Playlist name
-     * @param songs
-     *         Playlist songs
-     */
-    private void validatePlaylistFields(String name, List<Song> songs) {
-        Validate.notNull(name, "Playlist name cannot be null");
-        Validate.notNull(name, "Playlist's songs path cannot be null");
-        Validate.isTrue(!name.trim().isEmpty(), "Playlist name cannot be empty");
-        Validate.isTrue(!songs.isEmpty(), "Playlist's songs path name cannot be empty");
+    return playlists;
+  }
+
+  @Override
+  public Playlist getDefaultPlaylist() {
+    return mPlaylistsManager.findDefaultPlaylist();
+  }
+
+  /**
+   * This method creates the default playlist if there is no stored playlist
+   */
+  private void createDefaultPlaylist() {
+    Playlist defaultPlaylist = getDefaultPlaylist();
+    if (defaultPlaylist != null) {
+      return;
     }
-
-    /**
-     * This method updates an existing playlist
-     *
-     * @param playlistId
-     *         Playlist Id to be updated
-     * @param name
-     *         New playlist's name
-     * @param songs
-     *         New playlist's songs
-     *
-     * @return True if the playlist was updated. Otherwise returns False
-     */
-    @Override
-    public boolean updatePlaylist(int playlistId, String name, List<Song> songs) {
-        Playlist playlist = mPlaylistsManager.findById(playlistId);
-        if (playlist == null) {
-            return false;
-        }
-
-        validatePlaylistFields(name, songs);
-
-        playlist.setName(name);
-        playlist.setSongs(songs);
-
-        return mPlaylistsManager.createOrUpdate(playlist);
-    }
-
-    /**
-     * This method gets all stored playlists
-     *
-     * @return All stored playlists
-     */
-    @Override
-    public List<Playlist> getAllPlaylists() {
-        List<Playlist> playlists = mPlaylistsManager.all();
-
-        for (Playlist playlist : playlists) {
-            playlist.setSongs(mSongsManager.findByPlaylistId(playlist.getId()));
-        }
-
-        return playlists;
-    }
+    Uri defaultAlarm = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+    Song song = new Song();
+    song.setName(mContext.getString(R.string.default_song_name));
+    song.setPath(IOUtils.getPath(mContext, defaultAlarm));
+    List<Song> songs = new ArrayList<>(1);
+    songs.add(song);
+    createPlaylist(mContext.getString(R.string.default_playlist_name), songs, true);
+  }
 
 }

@@ -23,22 +23,24 @@ import dagger.Component;
 @Component(modules = {ManagersModule.class, ServicesModule.class})
 public interface DiComponent {
 
-    /**
-     * Context injection
-     *
-     * @return Injected context
-     */
-    Context context();
+  /**
+   * Context injection
+   *
+   * @return Injected context
+   */
+  Context context();
 
-    // Common Activities
-    void inject(MainActivity activity);
+  // Common Activities
+  void inject(MainActivity activity);
 
-    // Alarm Activities
-    void inject(AlarmManagerActivity activity);
-    void inject(AlarmsAdapter adapter);
+  // Alarm Activities
+  void inject(AlarmManagerActivity activity);
 
-    // Playlist Activities
-    void inject(AddPlaylistActivity activity);
-    void inject(PlaylistsManagerActivity activity);
+  void inject(AlarmsAdapter adapter);
+
+  // Playlist Activities
+  void inject(AddPlaylistActivity activity);
+
+  void inject(PlaylistsManagerActivity activity);
 
 }

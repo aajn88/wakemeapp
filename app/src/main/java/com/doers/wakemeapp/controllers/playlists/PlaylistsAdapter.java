@@ -21,116 +21,116 @@ import java.util.List;
  */
 public class PlaylistsAdapter extends RecyclerView.Adapter {
 
-    /** Playlists list **/
-    private final List<Playlist> mPlaylists;
+  /** Playlists list **/
+  private final List<Playlist> mPlaylists;
 
-    /** Layout inflater **/
-    private final LayoutInflater mInflater;
+  /** Layout inflater **/
+  private final LayoutInflater mInflater;
+
+  /**
+   * Adapter's constructor
+   *
+   * @param context
+   *         App context
+   * @param mPlaylists
+   *         Playlists list
+   */
+  public PlaylistsAdapter(Context context, List<Playlist> mPlaylists) {
+    this.mPlaylists = mPlaylists;
+    mInflater = LayoutInflater.from(context);
+  }
+
+  /**
+   * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent an
+   * item.
+   * <p>
+   * This new ViewHolder should be constructed with a new View that can represent the items of the
+   * given type. You can either create a new View manually or inflate it from an XML layout file.
+   * <p>
+   * The new ViewHolder will be used to display items of the adapter using {@link
+   * #onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display different
+   * items in the data set, it is a good idea to cache references to sub views of the View to
+   * avoid unnecessary {@link View#findViewById(int)} calls.
+   *
+   * @param parent
+   *         The ViewGroup into which the new View will be added after it is bound to an adapter
+   *         position.
+   * @param viewType
+   *         The view type of the new View.
+   *
+   * @return A new ViewHolder that holds a View of the given view type.
+   *
+   * @see #getItemViewType(int)
+   * @see #onBindViewHolder(ViewHolder, int)
+   */
+  @Override
+  public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    return new PlaylistHolder(
+            mInflater.inflate(R.layout.list_item_single_front_number, parent, false));
+  }
+
+  /**
+   * Called by RecyclerView to display the data at the specified position. This method should
+   * update the contents of the {@link ViewHolder#itemView} to reflect the item at the given
+   * position.
+   * <p>
+   * Note that unlike {@link ListView}, RecyclerView will not call this method again if the
+   * position of the item changes in the data set unless the item itself is invalidated or the new
+   * position cannot be determined. For this reason, you should only use the <code>position</code>
+   * parameter while acquiring the related data item inside this method and should not keep a copy
+   * of it. If you need the position of an item later on (e.g. in a click listener), use {@link
+   * ViewHolder#getAdapterPosition()} which will have the updated adapter position.
+   * <p>
+   * Override {@link #onBindViewHolder(ViewHolder, int, List)} instead if Adapter can handle
+   * effcient partial bind.
+   *
+   * @param holder
+   *         The ViewHolder which should be updated to represent the contents of the item at the
+   *         given position in the data set.
+   * @param position
+   *         The position of the item within the adapter's data set.
+   */
+  @Override
+  public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    PlaylistHolder vh = (PlaylistHolder) holder;
+    Playlist playlist = mPlaylists.get(position);
+
+    vh.mNameTv.setText(playlist.getName());
+    vh.mSongsNumberTv.setText(Integer.toString(playlist.getSongs().size()));
+  }
+
+  /**
+   * Returns the total number of items in the data set hold by the adapter.
+   *
+   * @return The total number of items in this adapter.
+   */
+  @Override
+  public int getItemCount() {
+    return mPlaylists.size();
+  }
+
+  /**
+   * Playlist's View Holder
+   */
+  private class PlaylistHolder extends ViewHolder {
+
+    /** Name TextView **/
+    TextView mNameTv;
+
+    /** Checkbox for selection **/
+    TextView mSongsNumberTv;
 
     /**
-     * Adapter's constructor
+     * Constructor for Playlist's View Holder
      *
-     * @param context
-     *         App context
-     * @param mPlaylists
-     *         Playlists list
+     * @param itemView
+     *         Item of the View Holder
      */
-    public PlaylistsAdapter(Context context, List<Playlist> mPlaylists) {
-        this.mPlaylists = mPlaylists;
-        mInflater = LayoutInflater.from(context);
+    public PlaylistHolder(View itemView) {
+      super(itemView);
+
+      mNameTv = (TextView) itemView.findViewById(R.id.text_tv);
+      mSongsNumberTv = (TextView) itemView.findViewById(R.id.number_tv);
     }
-
-    /**
-     * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent an
-     * item.
-     * <p>
-     * This new ViewHolder should be constructed with a new View that can represent the items of the
-     * given type. You can either create a new View manually or inflate it from an XML layout file.
-     * <p>
-     * The new ViewHolder will be used to display items of the adapter using {@link
-     * #onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display different
-     * items in the data set, it is a good idea to cache references to sub views of the View to
-     * avoid unnecessary {@link View#findViewById(int)} calls.
-     *
-     * @param parent
-     *         The ViewGroup into which the new View will be added after it is bound to an adapter
-     *         position.
-     * @param viewType
-     *         The view type of the new View.
-     *
-     * @return A new ViewHolder that holds a View of the given view type.
-     *
-     * @see #getItemViewType(int)
-     * @see #onBindViewHolder(ViewHolder, int)
-     */
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PlaylistHolder(
-                mInflater.inflate(R.layout.list_item_single_front_number, parent, false));
-    }
-
-    /**
-     * Called by RecyclerView to display the data at the specified position. This method should
-     * update the contents of the {@link ViewHolder#itemView} to reflect the item at the given
-     * position.
-     * <p>
-     * Note that unlike {@link ListView}, RecyclerView will not call this method again if the
-     * position of the item changes in the data set unless the item itself is invalidated or the new
-     * position cannot be determined. For this reason, you should only use the <code>position</code>
-     * parameter while acquiring the related data item inside this method and should not keep a copy
-     * of it. If you need the position of an item later on (e.g. in a click listener), use {@link
-     * ViewHolder#getAdapterPosition()} which will have the updated adapter position.
-     * <p>
-     * Override {@link #onBindViewHolder(ViewHolder, int, List)} instead if Adapter can handle
-     * effcient partial bind.
-     *
-     * @param holder
-     *         The ViewHolder which should be updated to represent the contents of the item at the
-     *         given position in the data set.
-     * @param position
-     *         The position of the item within the adapter's data set.
-     */
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        PlaylistHolder vh = (PlaylistHolder) holder;
-        Playlist playlist = mPlaylists.get(position);
-
-        vh.mNameTv.setText(playlist.getName());
-        vh.mSongsNumberTv.setText(Integer.toString(playlist.getSongs().size()));
-    }
-
-    /**
-     * Returns the total number of items in the data set hold by the adapter.
-     *
-     * @return The total number of items in this adapter.
-     */
-    @Override
-    public int getItemCount() {
-        return mPlaylists.size();
-    }
-
-    /**
-     * Playlist's View Holder
-     */
-    private class PlaylistHolder extends ViewHolder {
-
-        /** Name TextView **/
-        TextView mNameTv;
-
-        /** Checkbox for selection **/
-        TextView mSongsNumberTv;
-
-        /**
-         * Constructor for Playlist's View Holder
-         *
-         * @param itemView
-         *         Item of the View Holder
-         */
-        public PlaylistHolder(View itemView) {
-            super(itemView);
-
-            mNameTv = (TextView) itemView.findViewById(R.id.text_tv);
-            mSongsNumberTv = (TextView) itemView.findViewById(R.id.number_tv);
-        }
-    }
+  }
 }

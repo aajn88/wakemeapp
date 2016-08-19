@@ -29,76 +29,81 @@ import butterknife.BindView;
  */
 public class AlarmManagerActivity extends BaseActivity implements View.OnClickListener {
 
-    /** Alarms RecyclerView **/
-    @BindView(R.id.alarms_rv)
-    RecyclerView mAlarmsRv;
+  /** Alarms RecyclerView **/
+  @BindView(R.id.alarms_rv)
+  RecyclerView mAlarmsRv;
 
-    /** Add playlist FAB **/
-    @BindView(R.id.add_playlist_fab)
-    FloatingActionButton mAddPlaylistFab;
+  /** Add playlist FAB **/
+  @BindView(R.id.add_playlist_fab)
+  FloatingActionButton mAddPlaylistFab;
 
-    /** Add alarm FAB **/
-    @BindView(R.id.add_alarm_fab)
-    FloatingActionButton mAddAlarmFab;
+  /** Add alarm FAB **/
+  @BindView(R.id.add_alarm_fab)
+  FloatingActionButton mAddAlarmFab;
 
-    /** Floating Action Menu **/
-    @BindView(R.id.alarms_fam)
-    FloatingActionMenu mAlarmsFam;
+  /** Floating Action Menu **/
+  @BindView(R.id.alarms_fam)
+  FloatingActionMenu mAlarmsFam;
 
-    /** No alarms TextView **/
-    @BindView(R.id.no_alarms_tv)
-    TextView mNoAlarmsTv;
+  /** No alarms TextView **/
+  @BindView(R.id.no_alarms_tv)
+  TextView mNoAlarmsTv;
 
-    /** Alarms Service **/
-    @Inject
-    IAlarmsService mAlarmsService;
+  /** Alarms Service **/
+  @Inject
+  IAlarmsService mAlarmsService;
 
-    /** Alarms adapter **/
-    private AlarmsAdapter mAdapter;
+  /** Alarms adapter **/
+  private AlarmsAdapter mAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alarm_manager);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_alarm_manager);
 
-        setTitle(R.string.app_name);
+    setTitle(R.string.app_name);
 
-        mAddPlaylistFab.setOnClickListener(this);
-        mAddAlarmFab.setOnClickListener(this);
+    mAddPlaylistFab.setOnClickListener(this);
+    mAddAlarmFab.setOnClickListener(this);
 
-        mAlarmsRv.setLayoutManager(new LinearLayoutManager(this));
-        mAlarmsRv.addItemDecoration(new InitialSpaceItemDecoration(
-                (int) getResources().getDimension(R.dimen.condensedVerticalMargin)));
+    mAlarmsRv.setLayoutManager(new LinearLayoutManager(this));
+    mAlarmsRv.addItemDecoration(new InitialSpaceItemDecoration(
+            (int) getResources().getDimension(R.dimen.condensedVerticalMargin)));
 
-        List<Alarm> alarms = mAlarmsService.getAllAlarms();
-        if (alarms.isEmpty()) {
-            mNoAlarmsTv.setVisibility(View.VISIBLE);
-        }
-        mAdapter = new AlarmsAdapter(this, alarms);
-        mAlarmsRv.setAdapter(mAdapter);
+    List<Alarm> alarms = mAlarmsService.getAllAlarms();
+    if (alarms.isEmpty()) {
+      mNoAlarmsTv.setVisibility(View.VISIBLE);
     }
+    mAdapter = new AlarmsAdapter(this, alarms);
+    mAlarmsRv.setAdapter(mAdapter);
+  }
 
-    /**
-     * Injection component. This should be done if there are fields to be injected
-     *
-     * @param diComponent
-     *         Dependency injection
-     */
-    @Override
-    protected void injectComponent(DiComponent diComponent) {
-        diComponent.inject(this);
-    }
+  /**
+   * Injection component. This should be done if there are fields to be injected
+   *
+   * @param diComponent
+   *         Dependency injection
+   */
+  @Override
+  protected void injectComponent(DiComponent diComponent) {
+    diComponent.inject(this);
+  }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.add_playlist_fab:
-                PlaylistsManagerActivity.startActivity(this);
-                break;
-            case R.id.add_alarm_fab:
-                mAdapter.addAlarm();
-                mNoAlarmsTv.setVisibility(View.GONE);
-                break;
-        }
+  @Override
+  public void onClick(View view) {
+    switch (view.getId()) {
+      case R.id.add_playlist_fab:
+        PlaylistsManagerActivity.startActivity(this);
+        break;
+      case R.id.add_alarm_fab:
+        mAdapter.addAlarm();
+        mNoAlarmsTv.setVisibility(View.GONE);
+        break;
     }
+  }
+
+  @Override
+  public void onBackPressed() {
+    finishAffinity();
+  }
 }

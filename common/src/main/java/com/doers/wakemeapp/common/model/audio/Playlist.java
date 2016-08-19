@@ -11,61 +11,58 @@ import java.util.List;
  */
 public class Playlist {
 
-    /** Playlist Id **/
-    @DatabaseField(generatedId = true)
-    private Integer id;
+  /** Name of the isDefault column **/
+  public static final String IS_DEFAULT_COLUMN = "is_default";
 
-    /** Playlist name **/
-    @DatabaseField(canBeNull = false)
-    private String name;
+  /** Playlist Id **/
+  @DatabaseField(generatedId = true)
+  private Integer id;
 
-    /** Songs' path **/
-    private List<Song> songs;
+  /** Playlist name **/
+  @DatabaseField(canBeNull = false)
+  private String name;
 
-    /**
-     * @return the id
-     */
-    public Integer getId() {
-        return id;
-    }
+  /** Songs' path **/
+  private List<Song> songs;
 
-    /**
-     * @return id the id to set
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  /** Is the default playlist? **/
+  @DatabaseField(canBeNull = false, columnName = IS_DEFAULT_COLUMN)
+  private boolean isDefault;
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    /**
-     * @return name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    /**
-     * @return the songs
-     */
-    public List<Song> getSongs() {
-        return songs;
-    }
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * @return songs the songs to set
-     */
-    public void setSongs(List<Song> songs) {
-        this.songs = songs;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    @Override
-    public String toString() {
-        return name;
-    }
+  public List<Song> getSongs() {
+    return songs;
+  }
+
+  public void setSongs(List<Song> songs) {
+    this.songs = songs;
+  }
+
+  public boolean isDefault() {
+    return isDefault;
+  }
+
+  public void setDefault(boolean aDefault) {
+    isDefault = aDefault;
+  }
+
+  @Override
+  public String toString() {
+    return name;
+  }
 }

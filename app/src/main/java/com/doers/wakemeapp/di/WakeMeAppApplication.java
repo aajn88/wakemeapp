@@ -14,18 +14,18 @@ import com.doers.wakemeapp.di.modules.ServicesModule;
  */
 public class WakeMeAppApplication extends Application {
 
-    DiComponent component;
+  DiComponent component;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        component = DaggerDiComponent.builder().servicesModule(new ServicesModule(this))
-                .managersModule(new ManagersModule(this)).build();
-    }
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    component = DaggerDiComponent.builder().servicesModule(new ServicesModule(this))
+            .managersModule(new ManagersModule(this)).build();
+  }
 
-    public DiComponent getComponent() {
-        return component;
-    }
+  public DiComponent getComponent() {
+    return component;
+  }
 
 }
 

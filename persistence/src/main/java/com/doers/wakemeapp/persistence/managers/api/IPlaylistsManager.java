@@ -7,4 +7,13 @@ import com.doers.wakemeapp.common.model.audio.Playlist;
  *
  * @author <a href="mailto:aajn88@gmail.com">Antonio Jimenez</a>
  */
-public interface IPlaylistsManager extends ICrudManager<Playlist, Integer> {}
+public interface IPlaylistsManager extends ICrudManager<Playlist, Integer> {
+
+  /**
+   * This method finds the default playlist
+   *
+   * @return The default playlist
+   */
+  Playlist findDefaultPlaylist();
+
+}

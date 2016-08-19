@@ -13,16 +13,16 @@ import java.sql.SQLException;
  */
 public class AlarmsManager extends CrudManager<Alarm, Integer> implements IAlarmsManager {
 
-    /**
-     * This is the main constructor of the CrudManager
-     *
-     * @param helper
-     *         The DBHelper
-     *
-     * @throws SQLException
-     *         If there's an error creating the Entity's DAO
-     */
-    public AlarmsManager(DatabaseHelper helper) throws SQLException {
-        super(helper, Alarm.class);
-    }
+  /**
+   * This is the main constructor of the CrudManager
+   *
+   * @param helper
+   *         The DBHelper
+   *
+   * @throws SQLException
+   *         If there's an error creating the Entity's DAO
+   */
+  public AlarmsManager(DatabaseHelper helper) throws SQLException {
+    super(helper, Alarm.class);
+  }
 }
