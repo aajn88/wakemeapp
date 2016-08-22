@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -139,6 +140,31 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     setUpDays(vh, alarm);
     setUpTime(vh, alarm);
     setUpPlaylists(vh, alarm);
+    setUpEnable(vh, alarm);
+  }
+
+  /**
+   * This method sets up the enable/disable button
+   *
+   * @param vh
+   *         Owner ViewHolder
+   * @param alarm
+   *         Alarm to be activated or deactivated
+   */
+  private void setUpEnable(final AlarmHolder vh, final Alarm alarm) {
+    boolean isEnable = alarm.getEnable();
+    ViewUtils.enableViewGroup(vh.mContainer, isEnable);
+    vh.mContainer.setAlpha(isEnable ? 1.0f : 0.38f);
+    vh.mEnable.setOnCheckedChangeListener(null);
+    vh.mEnable.setChecked(isEnable);
+    vh.mEnable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        alarm.setEnable(b);
+        updateAlarm(vh.getAdapterPosition());
+        setUpEnable(vh, alarm);
+      }
+    });
   }
 
   /**
@@ -192,9 +218,8 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     vh.mCancelIv.setVisibility(show ? View.VISIBLE : View.GONE);
     if (show) {
       vh.mTitleEt.performClick();
-    } else {
-      ViewUtils.showKeyboard((Activity) mContext, false);
     }
+    ViewUtils.showKeyboard((Activity) mContext, show);
   }
 
   /**
@@ -316,10 +341,9 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
    * This method adds an alarm
    */
   public void addAlarm() {
-    mAlarms.add(mAlarmsService.getDefaultAlarm());
+    mAlarms.add(mAlarmsService.getNewAlarm());
     int lastItem = mAlarms.size() - 1;
     notifyItemInserted(lastItem);
-    updateAlarm(lastItem);
   }
 
   /**
@@ -359,6 +383,9 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
    */
   private class AlarmHolder extends ViewHolder {
 
+    /** Alarm container **/
+    ViewGroup mContainer;
+
     /** Alarm title **/
     RobotoTextView mTitleTv;
 
@@ -392,6 +419,7 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     public AlarmHolder(View itemView) {
       super(itemView);
 
+      mContainer = (ViewGroup) itemView.findViewById(R.id.alarm_container_ll);
       mTitleTv = (RobotoTextView) itemView.findViewById(R.id.title_rtv);
       mTitleEt = (EditText) itemView.findViewById(R.id.title_et);
       mTime = (RobotoTextView) itemView.findViewById(R.id.time_rtv);

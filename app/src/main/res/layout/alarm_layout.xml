@@ -15,6 +15,7 @@
     android:layout_marginStart="@dimen/condensedHorizontalMargin">
 
     <LinearLayout
+      android:id="@+id/alarm_container_ll"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"

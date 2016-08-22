@@ -27,6 +27,13 @@ public interface IAlarmsService {
   List<Alarm> getAllAlarms();
 
   /**
+   * This method creates a default alarm instance and store it in the database
+   *
+   * @return Created and stored alarm
+   */
+  Alarm getNewAlarm();
+
+  /**
    * This method creates a default alarm instance
    *
    * @return Default alarm

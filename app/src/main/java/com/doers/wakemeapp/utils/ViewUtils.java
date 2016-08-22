@@ -9,6 +9,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.doers.wakemeapp.R;
@@ -87,6 +88,26 @@ public final class ViewUtils {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+      }
+    }
+  }
+
+  /**
+   * Enables/Disables all child views in a view group.
+   *
+   * @param viewGroup
+   *         the view group
+   * @param enabled
+   *         <code>true</code> to enable, <code>false</code> to disable
+   *         the views.
+   */
+  public static void enableViewGroup(ViewGroup viewGroup, boolean enabled) {
+    int childCount = viewGroup.getChildCount();
+    for (int i = 0; i < childCount; i++) {
+      View view = viewGroup.getChildAt(i);
+      view.setEnabled(enabled);
+      if (view instanceof ViewGroup) {
+        enableViewGroup((ViewGroup) view, enabled);
       }
     }
   }

@@ -35,6 +35,10 @@ public class Alarm {
   @DatabaseField(foreign = true, foreignAutoRefresh = true)
   private Playlist playlist;
 
+  /** Is enable? **/
+  @DatabaseField(canBeNull = false, defaultValue = "true")
+  private Boolean isEnable;
+
   /**
    * @return the id
    */
@@ -123,5 +127,20 @@ public class Alarm {
    */
   public void setPlaylist(Playlist playlist) {
     this.playlist = playlist;
+  }
+
+  /**
+   * @return the isEnable
+   */
+  public Boolean getEnable() {
+    return isEnable;
+  }
+
+  /**
+   * @param isEnable
+   *         the isEnable to set
+   */
+  public void setEnable(Boolean enable) {
+    isEnable = enable;
   }
 }
