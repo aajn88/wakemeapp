@@ -85,6 +85,13 @@ public class AlarmsService implements IAlarmsService {
     return mAlarmsManager.all();
   }
 
+  @Override
+  public Alarm getNewAlarm() {
+    Alarm newAlarm = getDefaultAlarm();
+    createOrUpdateAlarm(newAlarm);
+    return newAlarm;
+  }
+
   /**
    * This method creates a default alarm instance
    *
@@ -100,6 +107,7 @@ public class AlarmsService implements IAlarmsService {
     defaultAlarm.setMinute(now.get(Calendar.MINUTE));
     defaultAlarm.setName(mContext.getString(R.string.playlist_default_title));
     defaultAlarm.setPlaylist(mPlaylistsService.getDefaultPlaylist());
+    defaultAlarm.setEnable(true);
 
     return defaultAlarm;
   }

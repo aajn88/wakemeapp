@@ -35,7 +35,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
   private static final String DB_NAME = "dbd_control.db";
 
   /** DB Version **/
-  private static final int DB_VERSION = 3;
+  private static final int DB_VERSION = 4;
 
   /** The connection source **/
   protected AndroidConnectionSource connectionSource = new AndroidConnectionSource(this);

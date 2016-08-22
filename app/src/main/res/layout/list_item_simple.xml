@@ -7,12 +7,12 @@
               android:minHeight="?android:attr/listPreferredItemHeight"
               android:orientation="vertical">
 
-    <com.doers.wakemeapp.custom_views.font.RobotoTextView
-        android:id="@+id/text_rtv"
-        style="@style/SubheadingStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/standardHorizontalMargin"
-        android:layout_marginRight="@dimen/standardHorizontalMargin"/>
+  <com.doers.wakemeapp.custom_views.font.RobotoTextView
+    android:id="@+id/text_rtv"
+    style="@style/SubheadingStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/standardHorizontalMargin"
+    android:layout_marginRight="@dimen/standardHorizontalMargin"/>
 
 </LinearLayout>

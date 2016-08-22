@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Generics -->
-    <string name="logo_description">Logo description</string>
-    <string name="playlists">Playlists</string>
-    <string name="save">Save</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="discard">Discard</string>
+  <!-- Generics -->
+  <string name="logo_description">Logo description</string>
+  <string name="playlists">Playlists</string>
+  <string name="save">Save</string>
+  <string name="ok">OK</string>
+  <string name="cancel">Cancel</string>
+  <string name="discard">Discard</string>
 
-    <!-- Error messages -->
-    <string name="mandatory_field">Don\'t forget this field</string>
-    <string name="empty_playlist_error">Please, add a playlist name</string>
+  <!-- Error messages -->
+  <string name="mandatory_field">Don\'t forget this field</string>
+  <string name="empty_playlist_error">Please, add a playlist name</string>
 
-    <!-- Week days -->
-    <string name="monday_initial">M</string>
-    <string name="tuesday_initial">T</string>
-    <string name="wednesday_initial">W</string>
-    <string name="thursday_initial">T</string>
-    <string name="friday_initial">F</string>
-    <string name="saturday_initial">S</string>
-    <string name="sunday_initial">S</string>
+  <!-- Week days -->
+  <string name="monday_initial">M</string>
+  <string name="tuesday_initial">T</string>
+  <string name="wednesday_initial">W</string>
+  <string name="thursday_initial">T</string>
+  <string name="friday_initial">F</string>
+  <string name="saturday_initial">S</string>
+  <string name="sunday_initial">S</string>
 
-    <!-- Home Activity -->
-    <string name="add_playlist">Add playlist</string>
-    <string name="add_alarm">Add alarm</string>
-    <string name="no_alarms">You have no alarms. Add the first one!</string>
+  <!-- Home Activity -->
+  <string name="add_playlist">Add playlist</string>
+  <string name="add_alarm">Add alarm</string>
+  <string name="no_alarms">You have no alarms. Add the first one!</string>
 
-    <!-- Add playlist -->
-    <string name="playlist_name">Playlist name</string>
-    <string name="playlist_created">Playlist successfully created</string>
-    <string name="discard_playlist_msg">Discard playlist?</string>
+  <!-- Add playlist -->
+  <string name="playlist_name">Playlist name</string>
+  <string name="playlist_created">Playlist successfully created</string>
+  <string name="discard_playlist_msg">Discard playlist?</string>
 
-    <!-- Add song -->
-    <string name="no_songs">You have no songs. Add the first one!</string>
-    <string name="type_song_title">Type song\'s title</string>
+  <!-- Add song -->
+  <string name="no_songs">You have no songs. Add the first one!</string>
+  <string name="type_song_title">Type song\'s title</string>
 
 
 </resources>

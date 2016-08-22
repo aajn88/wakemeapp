@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">WakeMeApp</string>
+  <string name="app_name">WakeMeApp</string>
 
-    <!-- Icons title -->
-    <string name="check_title">Check icon</string>
+  <!-- Icons title -->
+  <string name="check_title">Check icon</string>
 </resources>
