@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -82,10 +84,10 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
   /**
    * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent an
    * item.
-   * <p>
+   * <p/>
    * This new ViewHolder should be constructed with a new View that can represent the items of the
    * given type. You can either create a new View manually or inflate it from an XML layout file.
-   * <p>
+   * <p/>
    * The new ViewHolder will be used to display items of the adapter using {@link
    * #onBindViewHolder(ViewHolder, int, List)}. Since it will be re-used to display different
    * items in the data set, it is a good idea to cache references to sub views of the View to
@@ -111,14 +113,14 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
    * Called by RecyclerView to display the data at the specified position. This method should
    * update the contents of the {@link ViewHolder#itemView} to reflect the item at the given
    * position.
-   * <p>
+   * <p/>
    * Note that unlike {@link ListView}, RecyclerView will not call this method again if the
    * position of the item changes in the data set unless the item itself is invalidated or the new
    * position cannot be determined. For this reason, you should only use the <code>position</code>
    * parameter while acquiring the related data item inside this method and should not keep a copy
    * of it. If you need the position of an item later on (e.g. in a click listener), use {@link
    * ViewHolder#getAdapterPosition()} which will have the updated adapter position.
-   * <p>
+   * <p/>
    * Override {@link #onBindViewHolder(ViewHolder, int, List)} instead if Adapter can handle
    * effcient partial bind.
    *
@@ -133,19 +135,77 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     final AlarmHolder vh = (AlarmHolder) holder;
     final Alarm alarm = mAlarms.get(position);
 
-    final boolean[] scheduledDays = alarm.getScheduledDays();
-    for (int i = 0; i < scheduledDays.length; i++) {
-      updateDay(scheduledDays[i], vh.mDays[i]);
-      final int finalI = i;
-      vh.mDays[i].setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          scheduledDays[finalI] = !scheduledDays[finalI];
-          updateDay(scheduledDays[finalI], vh.mDays[finalI]);
-          updateAlarm(holder.getAdapterPosition());
-        }
-      });
+    setUpTitle(vh, alarm);
+    setUpDays(vh, alarm);
+    setUpTime(vh, alarm);
+    setUpPlaylists(vh, alarm);
+  }
+
+  /**
+   * This method sets up the title for the given alarm
+   *
+   * @param vh
+   *         ViewHolder to be set up
+   * @param alarm
+   *         Current alarm
+   */
+  private void setUpTitle(final AlarmHolder vh, final Alarm alarm) {
+    vh.mTitleTv.setText(alarm.getName());
+    vh.mTitleTv.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        vh.mTitleEt.setText(alarm.getName());
+        showEditTitle(vh, true);
+      }
+    });
+
+    vh.mConfirmIv.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        alarm.setName(vh.mTitleEt.getText().toString().trim());
+        updateAlarm(vh.getAdapterPosition());
+        setUpTitle(vh, alarm);
+        showEditTitle(vh, false);
+      }
+    });
+    vh.mCancelIv.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        showEditTitle(vh, false);
+      }
+    });
+
+  }
+
+  /**
+   * This method shows/hides the alarm edit title and its related views
+   *
+   * @param vh
+   *         Owner ViewHolder
+   * @param show
+   *         Show or hide
+   */
+  private void showEditTitle(AlarmHolder vh, boolean show) {
+    vh.mTitleTv.setVisibility(show ? View.GONE : View.VISIBLE);
+    vh.mTitleEt.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    vh.mConfirmIv.setVisibility(show ? View.VISIBLE : View.GONE);
+    vh.mCancelIv.setVisibility(show ? View.VISIBLE : View.GONE);
+    if (show) {
+      vh.mTitleEt.performClick();
+    } else {
+      ViewUtils.showKeyboard((Activity) mContext, false);
     }
+  }
+
+  /**
+   * This method sets up the current time for the given holder
+   *
+   * @param vh
+   *         ViewHolder to be set up
+   * @param alarm
+   *         Current alarm
+   */
+  private void setUpTime(final AlarmHolder vh, final Alarm alarm) {
     updateTime(vh, alarm);
     vh.mTime.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -165,7 +225,30 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
                 "timePicker");
       }
     });
-    setUpPlaylists(vh, alarm);
+  }
+
+  /**
+   * This method sets up the current days for the given holder
+   *
+   * @param vh
+   *         ViewHolder to be set up
+   * @param alarm
+   *         Current alarm
+   */
+  private void setUpDays(final AlarmHolder vh, Alarm alarm) {
+    final boolean[] scheduledDays = alarm.getScheduledDays();
+    for (int i = 0; i < scheduledDays.length; i++) {
+      updateDay(scheduledDays[i], vh.mDays[i]);
+      final int finalI = i;
+      vh.mDays[i].setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          scheduledDays[finalI] = !scheduledDays[finalI];
+          updateDay(scheduledDays[finalI], vh.mDays[finalI]);
+          updateAlarm(vh.getAdapterPosition());
+        }
+      });
+    }
   }
 
   private void updateTime(AlarmHolder vh, Alarm alarm) {
@@ -277,7 +360,16 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
   private class AlarmHolder extends ViewHolder {
 
     /** Alarm title **/
-    RobotoTextView mTitle;
+    RobotoTextView mTitleTv;
+
+    /** Alarm title EditText **/
+    EditText mTitleEt;
+
+    /** Confirm btn **/
+    ImageView mConfirmIv;
+
+    /** Cancel btn **/
+    ImageView mCancelIv;
 
     /** Alarm time **/
     RobotoTextView mTime;
@@ -300,11 +392,14 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     public AlarmHolder(View itemView) {
       super(itemView);
 
-      mTitle = (RobotoTextView) itemView.findViewById(R.id.title_rtv);
+      mTitleTv = (RobotoTextView) itemView.findViewById(R.id.title_rtv);
+      mTitleEt = (EditText) itemView.findViewById(R.id.title_et);
       mTime = (RobotoTextView) itemView.findViewById(R.id.time_rtv);
       loadWeekdays(itemView);
       mPlaylists = (Spinner) itemView.findViewById(R.id.playlists_sp);
       mEnable = (SwitchCompat) itemView.findViewById(R.id.enable_sw);
+      mConfirmIv = (ImageView) itemView.findViewById(R.id.confirm_iv);
+      mCancelIv = (ImageView) itemView.findViewById(R.id.cancel_iv);
     }
 
     /**

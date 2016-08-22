@@ -10,11 +10,11 @@
                 android:paddingTop="@dimen/standardVerticalMargin"
                 tools:context="com.doers.wakemeapp.controllers.MainActivity">
 
-    <ImageView
-        android:id="@+id/logo_iv"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerInParent="true"
-        android:contentDescription="@string/logo_description"
-        android:src="@drawable/ic_logo"/>
+  <ImageView
+    android:id="@+id/logo_iv"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:layout_centerInParent="true"
+    android:contentDescription="@string/logo_description"
+    android:src="@drawable/ic_logo"/>
 </RelativeLayout>
