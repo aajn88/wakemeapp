@@ -129,7 +129,7 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
    *         The position of the item within the adapter's data set.
    */
   @Override
-  public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+  public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
     final AlarmHolder vh = (AlarmHolder) holder;
     final Alarm alarm = mAlarms.get(position);
 
@@ -142,7 +142,7 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
         public void onClick(View view) {
           scheduledDays[finalI] = !scheduledDays[finalI];
           updateDay(scheduledDays[finalI], vh.mDays[finalI]);
-          updateAlarm(position);
+          updateAlarm(holder.getAdapterPosition());
         }
       });
     }
