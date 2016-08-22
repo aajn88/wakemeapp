@@ -6,37 +6,37 @@
               android:orientation="vertical"
               tools:context="com.doers.wakemeapp.controllers.playlists.AddPlaylistActivity">
 
-    <include layout="@layout/add_playlist_toolbar"/>
+  <include layout="@layout/add_playlist_toolbar"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/playlist_songs_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/playlist_songs_rv"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
 
-        <com.doers.wakemeapp.custom_views.font.RobotoTextView
-            android:id="@+id/no_songs_tv"
-            style="@style/SubheadingStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/no_songs"
-            android:textColor="@color/colorAccent"
-            android:visibility="gone"/>
+    <com.doers.wakemeapp.custom_views.font.RobotoTextView
+      android:id="@+id/no_songs_tv"
+      style="@style/SubheadingStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="@string/no_songs"
+      android:textColor="@color/colorAccent"
+      android:visibility="gone"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_song_fab"
-            style="@style/FabTheme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/fab_add"/>
+    <android.support.design.widget.FloatingActionButton
+      android:id="@+id/add_song_fab"
+      style="@style/FabTheme"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:src="@drawable/fab_add"/>
 
-    </RelativeLayout>
+  </RelativeLayout>
 
 </LinearLayout>

@@ -6,29 +6,29 @@
               android:orientation="vertical"
               tools:showIn="@layout/activity_add_playlist">
 
-    <include layout="@layout/toolbar"/>
+  <include layout="@layout/toolbar"/>
 
-    <RelativeLayout
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@color/colorPrimary"
+    android:elevation="@dimen/actionBarElevation">
+
+    <android.support.design.widget.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:layout_marginEnd="@dimen/standardHorizontalMargin"
+      android:layout_marginStart="@dimen/expandedTitleMarginStart"
+      android:theme="@style/TextLabel">
+
+      <EditText
+        android:id="@+id/playlist_name_et"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/colorPrimary"
-        android:elevation="@dimen/actionBarElevation">
+        android:layout_height="wrap_content"
+        android:hint="@string/playlist_name"
+        android:textColor="@color/white"/>
+    </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/standardHorizontalMargin"
-            android:layout_marginStart="@dimen/expandedTitleMarginStart"
-            android:theme="@style/TextLabel">
-
-            <EditText
-                android:id="@+id/playlist_name_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/playlist_name"
-                android:textColor="@color/white"/>
-        </android.support.design.widget.TextInputLayout>
-
-    </RelativeLayout>
+  </RelativeLayout>
 </LinearLayout>
