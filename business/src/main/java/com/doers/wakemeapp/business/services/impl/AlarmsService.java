@@ -1,16 +1,23 @@
 package com.doers.wakemeapp.business.services.impl;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.util.Log;
 
 import com.doers.wakemeapp.business.R;
 import com.doers.wakemeapp.business.services.api.IAlarmsService;
 import com.doers.wakemeapp.business.services.api.IPlaylistsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
+import com.doers.wakemeapp.common.utils.DateUtils;
 import com.doers.wakemeapp.persistence.managers.api.IAlarmsManager;
 
 import org.apache.commons.lang3.Validate;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +26,18 @@ import java.util.List;
  * @author <a href="mailto:aajn88@gmail.com">Antonio Jimenez</a>
  */
 public class AlarmsService implements IAlarmsService {
+
+  /** Tag for logs **/
+  private static final String TAG = AlarmsService.class.getSimpleName();
+
+  /** Alarm wake up **/
+  private static final String ALARM_WAKE_UP = "com.doers.wakemeapp.ALARM_WAKE_UP";
+
+  /** ID threshold **/
+  private static final int ID_THRESHOLD = 10;
+
+  /** Alarm threshold in seconds to activate alarm before it occurs **/
+  private static final int THRESHOLD_MILLIS = 0;
 
   /** Week days count **/
   private static final int WEEK_DAYS_COUNT = 7;
@@ -56,9 +75,96 @@ public class AlarmsService implements IAlarmsService {
    *         Alarm to be created or updated
    */
   @Override
-  public void createOrUpdateAlarm(Alarm alarm) {
+  public void setUpAlarm(Alarm alarm) {
     validateFields(alarm);
     mAlarmsManager.createOrUpdate(alarm);
+    setUpAlarmLaunch(alarm);
+  }
+
+  @Override
+  public Alarm findAlarmById(int id) {
+    return mAlarmsManager.findById(id);
+  }
+
+  /**
+   * This method sets up the alarm times, in that way, the device will start at the expecting times
+   * of the user
+   *
+   * @param alarm
+   *         Alarm to be set up
+   */
+  private void setUpAlarmLaunch(Alarm alarm) {
+    boolean isEnable = alarm.getEnable();
+    boolean[] scheduledDays = alarm.getScheduledDays();
+    for (int i = 0; i < scheduledDays.length; i++) {
+      scheduleAlarm(alarm, i, isEnable && scheduledDays[i]);
+    }
+  }
+
+  /**
+   * This method schedules or stops an alarm given its day
+   *
+   * @param alarm
+   *         Alarm to be scheduled
+   * @param day
+   *         Day to be scheduled [0-7)
+   * @param enable
+   *         If the given alarm must to be enable or disable
+   */
+  private void scheduleAlarm(Alarm alarm, int day, boolean enable) {
+    AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+    int alarmId = alarm.getId() * ID_THRESHOLD + day;
+    long nextAlarmMillis = calculateMillisForNextAlarm(alarm, day);
+    Intent alarmIntent = new Intent(ALARM_WAKE_UP);
+    alarmIntent.putExtra(ALARM_ID, alarm.getId());
+    alarmIntent.putExtra(ALARM_DAY, day);
+    alarmIntent.putExtra(ALARM_LAUNCHING_TIME, nextAlarmMillis);
+    PendingIntent pi = PendingIntent.getBroadcast(mContext, alarmId, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT);
+    String action;
+    if (enable) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        am.setWindow(AlarmManager.RTC_WAKEUP, nextAlarmMillis - THRESHOLD_MILLIS, 0, pi);
+      } else {
+        am.set(AlarmManager.RTC_WAKEUP, nextAlarmMillis - THRESHOLD_MILLIS, pi);
+      }
+      action = "scheduled";
+    } else {
+      am.cancel(pi);
+      action = "cancelled";
+    }
+
+    Log.d(TAG, "Alarm " + action + " for day: " + day + " at " +
+            DateUtils.format(new Date(nextAlarmMillis), DateUtils.DEFAULT_FORMAT));
+
+  }
+
+  /**
+   * This method calculates the remaining millis for the next time the alarm should be triggered
+   *
+   * @param alarm
+   *         Alarm
+   * @param day
+   *         Expected day
+   *
+   * @return Remaining millis for the requested day and time
+   */
+  private long calculateMillisForNextAlarm(Alarm alarm, int day) {
+    Calendar now = Calendar.getInstance();
+    Calendar expectedTime = Calendar.getInstance();
+    expectedTime.set(Calendar.HOUR_OF_DAY, alarm.getHour());
+    expectedTime.set(Calendar.MINUTE, alarm.getMinute());
+    expectedTime.set(Calendar.SECOND, 0);
+    expectedTime.set(Calendar.MILLISECOND, 0);
+    int curDay = now.get(Calendar.DAY_OF_WEEK) - 2;
+    curDay = curDay < 0 ? WEEK_DAYS_COUNT - 1 : curDay;
+    int nextDays = day - curDay;
+    nextDays = nextDays < 0 ? nextDays + WEEK_DAYS_COUNT : nextDays;
+    if (nextDays == 0 && expectedTime.compareTo(now) < 0) {
+      nextDays += WEEK_DAYS_COUNT;
+    }
+    expectedTime.add(Calendar.DAY_OF_YEAR, nextDays);
+    return expectedTime.getTimeInMillis();
   }
 
   /**
@@ -88,7 +194,7 @@ public class AlarmsService implements IAlarmsService {
   @Override
   public Alarm getNewAlarm() {
     Alarm newAlarm = getDefaultAlarm();
-    createOrUpdateAlarm(newAlarm);
+    setUpAlarm(newAlarm);
     return newAlarm;
   }
 

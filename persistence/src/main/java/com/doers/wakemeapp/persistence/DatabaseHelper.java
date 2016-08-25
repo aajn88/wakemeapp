@@ -196,7 +196,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
   /**
    * This method obtains a DAO given its Class
-   * <p>
+   * <p/>
    * Source: https://goo.gl/6LIYy2
    *
    * @param clazz

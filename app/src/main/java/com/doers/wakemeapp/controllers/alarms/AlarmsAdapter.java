@@ -44,6 +44,9 @@ import javax.inject.Inject;
  */
 public class AlarmsAdapter extends RecyclerView.Adapter {
 
+  /** Time picker tag **/
+  private static final String TIME_PICKER_TAG = "TIME_PICKER";
+
   /** Weekdays' IDs **/
   private static final int[] WEEKDAYS_IDS = {R.id.monday_rtv, R.id.tuesday_rtv,
           R.id.wednesday_rtv, R.id.thursday_rtv, R.id.friday_rtv, R.id.saturday_rtv,
@@ -79,7 +82,7 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     mContext = activity;
     mInflater = LayoutInflater.from(activity);
     mAlarms = new ArrayList<>(alarms);
-    ((WakeMeAppApplication) activity.getApplication()).getComponent().inject(this);
+    ((WakeMeAppApplication) activity.getApplication()).getInjector().inject(this);
   }
 
   /**
@@ -244,10 +247,10 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
                             alarm.setHour(hour);
                             alarm.setMinute(minute);
                             updateTime(vh, alarm);
+                            updateAlarm(vh.getAdapterPosition());
                           }
                         });
-        timePicker.show(((FragmentActivity) mContext).getSupportFragmentManager(),
-                "timePicker");
+        timePicker.show(((FragmentActivity) mContext).getSupportFragmentManager(), TIME_PICKER_TAG);
       }
     });
   }
@@ -329,7 +332,7 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
    */
   private void storePlaylist(Alarm alarm, Playlist playlist) {
     alarm.setPlaylist(playlist);
-    mAlarmsService.createOrUpdateAlarm(alarm);
+    mAlarmsService.setUpAlarm(alarm);
   }
 
   private void updateDay(boolean scheduledDay, TextView tv) {
@@ -353,7 +356,7 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
    *         Alarm index to be updated
    */
   private void updateAlarm(int i) {
-    mAlarmsService.createOrUpdateAlarm(mAlarms.get(i));
+    mAlarmsService.setUpAlarm(mAlarms.get(i));
   }
 
   /**
