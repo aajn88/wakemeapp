@@ -14,6 +14,7 @@ import com.doers.wakemeapp.di.modules.ServicesModule;
  */
 public class WakeMeAppApplication extends Application {
 
+  /** Dependency Injection component **/
   DiComponent component;
 
   @Override
@@ -23,7 +24,12 @@ public class WakeMeAppApplication extends Application {
             .managersModule(new ManagersModule(this)).build();
   }
 
-  public DiComponent getComponent() {
+  /**
+   * This method returns the Dagger injector
+   *
+   * @return Dagger injector
+   */
+  public DiComponent getInjector() {
     return component;
   }
 

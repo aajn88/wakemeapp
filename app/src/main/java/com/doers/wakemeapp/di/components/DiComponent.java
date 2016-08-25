@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.doers.wakemeapp.controllers.MainActivity;
 import com.doers.wakemeapp.controllers.alarms.AlarmManagerActivity;
+import com.doers.wakemeapp.controllers.alarms.AlarmReceiver;
 import com.doers.wakemeapp.controllers.alarms.AlarmsAdapter;
 import com.doers.wakemeapp.controllers.playlists.AddPlaylistActivity;
 import com.doers.wakemeapp.controllers.playlists.PlaylistsManagerActivity;
@@ -43,4 +44,6 @@ public interface DiComponent {
 
   void inject(PlaylistsManagerActivity activity);
 
+  // Broadcast receivers
+  void inject(AlarmReceiver alarmReceiver);
 }
