@@ -39,6 +39,16 @@ public interface IPlaylistsService {
   boolean updatePlaylist(int playlistId, String name, List<Song> songs);
 
   /**
+   * This method finds a playlist given its ID
+   *
+   * @param playlistId
+   *         Playlist ID
+   *
+   * @return Playlist instance or null if it was not found
+   */
+  Playlist findPlaylistById(int playlistId);
+
+  /**
    * This method gets all stored playlists
    *
    * @return All stored playlists

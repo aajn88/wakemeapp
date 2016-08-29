@@ -83,7 +83,11 @@ public class AlarmsService implements IAlarmsService {
 
   @Override
   public Alarm findAlarmById(int id) {
-    return mAlarmsManager.findById(id);
+    Alarm alarm = mAlarmsManager.findById(id);
+    if (alarm != null && alarm.getPlaylist() != null) {
+      alarm.setPlaylist(mPlaylistsService.findPlaylistById(alarm.getPlaylist().getId()));
+    }
+    return alarm;
   }
 
   /**
