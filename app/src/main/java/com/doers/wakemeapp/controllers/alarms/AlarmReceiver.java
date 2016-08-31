@@ -36,8 +36,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     Log.i(TAG, "Alarm has been launched");
     int alarmId = intent.getIntExtra(IAlarmsService.ALARM_ID, -1);
     final int alarmDay = intent.getIntExtra(IAlarmsService.ALARM_DAY, -1);
-    long launchingTime = intent.getLongExtra(IAlarmsService.ALARM_LAUNCHING_TIME, -1);
-    if (alarmId == -1 || alarmDay == -1 || launchingTime == -1) {
+    if (alarmId == -1 || alarmDay == -1) {
       Log.w(TAG, "Alarm data has not been sent correctly. The alarm couldn't be launched");
       return;
     }
