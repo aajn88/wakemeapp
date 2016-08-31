@@ -2,17 +2,17 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
   <item
-    android:drawable="@drawable/ic_lockscreen_answer_normal_layer"
+    android:drawable="@drawable/ic_snooze_alarm_normal_layer"
     android:state_active="false"
     android:state_enabled="true"
     android:state_focused="false"/>
   <item
-    android:drawable="@drawable/ic_lockscreen_answer_activated_layer"
+    android:drawable="@drawable/ic_snooze_alarm_activated_layer"
     android:state_active="true"
     android:state_enabled="true"
     android:state_focused="false"/>
   <item
-    android:drawable="@drawable/ic_lockscreen_answer_activated_layer"
+    android:drawable="@drawable/ic_snooze_alarm_activated_layer"
     android:state_active="false"
     android:state_enabled="true"
     android:state_focused="true"/>

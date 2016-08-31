@@ -19,13 +19,13 @@
 
     app:feedbackCount="1"
     app:glowRadius="@dimen/glowpadview_glow_radius"
-    app:handleDrawable="@drawable/ic_in_call_touch_handle"
+    app:handleDrawable="@drawable/ic_alarm_touch_handle"
     app:innerRadius="@dimen/glowpadview_inner_radius"
     app:outerRadius="@dimen/glowpadview_target_placement_radius"
     app:outerRingDrawable="@drawable/ic_lockscreen_outerring"
     app:pointDrawable="@drawable/ic_glowdot"
     app:snapMargin="@dimen/glowpadview_snap_margin"
-    app:targetDrawables="@array/incoming_call_widget_2way_targets"
+    app:targetDrawables="@array/alarm_widget_2way_targets"
     app:vibrationDuration="20"/>
 
   <com.doers.wakemeapp.custom_views.font.RobotoTextView

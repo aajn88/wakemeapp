@@ -1,10 +1,16 @@
 package com.doers.wakemeapp.controllers.alarms;
 
+import android.annotation.TargetApi;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -16,8 +22,11 @@ import com.doers.wakemeapp.business.services.api.IAlarmsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
 import com.doers.wakemeapp.common.model.audio.Song;
 import com.doers.wakemeapp.common.utils.DateUtils;
+import com.doers.wakemeapp.controllers.MainActivity;
 import com.doers.wakemeapp.controllers.common.BaseActivity;
 import com.doers.wakemeapp.di.components.DiComponent;
+import com.doers.wakemeapp.utils.DeviceUtils;
+import com.doers.wakemeapp.utils.ViewUtils;
 
 import net.frakbot.glowpadbackport.GlowPadView;
 
@@ -79,6 +88,9 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
   /** Must keep playing? **/
   private boolean mKeepPlaying = false;
 
+  /** Formatted time **/
+  private String mFormattedTime;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -90,6 +102,8 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
       return;
     }
 
+    establishStatusBarColor();
+
     prepareActivity();
     mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
     mAlarmActionGpv.setOnTriggerListener(this);
@@ -97,9 +111,30 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
     Calendar now = Calendar.getInstance();
     now.set(Calendar.HOUR_OF_DAY, mCurrentAlarm.getHour());
     now.set(Calendar.MINUTE, mCurrentAlarm.getMinute());
-    mAlarmTimeRtv.setText(DateUtils.format(now.getTime(), DateUtils.TIME_FORMAT));
+    mFormattedTime = DateUtils.format(now.getTime(), DateUtils.TIME_FORMAT);
+    mAlarmTimeRtv.setText(mFormattedTime);
 
     executeAlarm();
+  }
+
+  /**
+   * This method establishes the status bar color
+   */
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+  private void establishStatusBarColor() {
+    if (!DeviceUtils.isLollipopOrGreater()) {
+      return;
+    }
+    Window window = getWindow();
+
+    // clear FLAG_TRANSLUCENT_STATUS flag:
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+    // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+    // finally change the color
+    window.setStatusBarColor(ViewUtils.getColor(this, R.color.material_blue_grey_700));
   }
 
   /**
@@ -127,6 +162,25 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
         }
       }
     });
+
+    displayNotification();
+  }
+
+  /**
+   * This method displays the notification in the status bar
+   */
+  private void displayNotification() {
+    NotificationCompat.Builder builder =
+            new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_alarm)
+                    .setContentTitle(mCurrentAlarm.getName())
+                    .setContentText(mFormattedTime)
+                    .setAutoCancel(true);
+    Intent homeIntent = new Intent(this, MainActivity.class);
+    PendingIntent homePendingIntent =
+            PendingIntent.getActivity(this, 0, homeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    builder.setContentIntent(homePendingIntent);
+    NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    nm.notify(mCurrentAlarm.getId(), builder.build());
   }
 
   /**
