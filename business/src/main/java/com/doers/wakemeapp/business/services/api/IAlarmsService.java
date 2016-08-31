@@ -17,9 +17,6 @@ public interface IAlarmsService {
   /** Alarm day ID extra **/
   String ALARM_DAY = "ALARM_DAY";
 
-  /** Alarm launching time **/
-  String ALARM_LAUNCHING_TIME = "ALARM_LAUNCHING_TIME";
-
   /**
    * This method creates or updates an alarm
    *
@@ -59,4 +56,13 @@ public interface IAlarmsService {
    */
   Alarm getDefaultAlarm();
 
+  /**
+   * This method snoozes the given alarm for the established time
+   *
+   * @param alarmId
+   *         Alarm ID to be snoozed
+   * @param day
+   *         Snoozed day
+   */
+  void snoozeAlarm(int alarmId, int day);
 }
