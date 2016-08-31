@@ -11,7 +11,7 @@
 
   <!-- Error messages -->
   <string name="mandatory_field">Don\'t forget this field</string>
-  <string name="empty_playlist_error">Please, add a playlist name</string>
+  <string name="empty_playlist_error">Please, add at least one song</string>
 
   <!-- Week days -->
   <string name="monday_initial">M</string>
