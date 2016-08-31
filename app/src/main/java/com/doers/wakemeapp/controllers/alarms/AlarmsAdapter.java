@@ -382,6 +382,18 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
   }
 
   /**
+   * This method deletes the alarm at the given position
+   *
+   * @param position
+   *         Position to be deleted
+   */
+  public void deleteAlarm(int position) {
+    Alarm alarm = mAlarms.remove(position);
+    mAlarmsService.deleteAlarm(alarm.getId());
+    notifyItemRemoved(position);
+  }
+
+  /**
    * Alarm ViewHolder
    */
   private class AlarmHolder extends ViewHolder {

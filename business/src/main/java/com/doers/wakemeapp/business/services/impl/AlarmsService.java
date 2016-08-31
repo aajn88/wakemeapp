@@ -251,6 +251,19 @@ public class AlarmsService implements IAlarmsService {
             DateUtils.format(new Date(nextAlarmMillis), DateUtils.DEFAULT_FORMAT));
   }
 
+  @Override
+  public void deleteAlarm(int alarmId) {
+    Alarm alarm = findAlarmById(alarmId);
+    if (alarm == null) {
+      return;
+    }
+
+    alarm.setEnable(false);
+    setUpAlarm(alarm);
+    mAlarmsManager.deleteById(alarmId);
+    Log.d(TAG, "The alarm " + alarmId + " has been deleted");
+  }
+
   /**
    * This method gets the default scheduled days
    *

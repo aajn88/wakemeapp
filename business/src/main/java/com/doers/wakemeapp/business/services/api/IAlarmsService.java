@@ -65,4 +65,13 @@ public interface IAlarmsService {
    *         Snoozed day
    */
   void snoozeAlarm(int alarmId, int day);
+
+  /**
+   * This method removes an alarm given its ID
+   *
+   * @param alarmId
+   *         ID of the alarm to be removed
+   */
+  void deleteAlarm(int alarmId);
+
 }
