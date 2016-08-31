@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <array name="alarm_widget_2way_targets">
+    <item>@drawable/ic_lockscreen_snooze</item>
+    <item>@null</item>
+    <item>@drawable/ic_lockscreen_cancel</item>
+    <item>@null</item>
+  </array>
+
+</resources>

@@ -11,13 +11,32 @@ import java.util.List;
  */
 public interface IAlarmsService {
 
+  /** Alarm ID extra **/
+  String ALARM_ID = "ALARM_ID";
+
+  /** Alarm day ID extra **/
+  String ALARM_DAY = "ALARM_DAY";
+
+  /** Alarm launching time **/
+  String ALARM_LAUNCHING_TIME = "ALARM_LAUNCHING_TIME";
+
   /**
    * This method creates or updates an alarm
    *
    * @param alarm
    *         Alarm to be created or updated
    */
-  void createOrUpdateAlarm(Alarm alarm);
+  void setUpAlarm(Alarm alarm);
+
+  /**
+   * This method finds an alarm
+   *
+   * @param id
+   *         Alarm ID
+   *
+   * @return Found alarm. If not, null is returned
+   */
+  Alarm findAlarmById(int id);
 
   /**
    * This method gets all the stored alarms

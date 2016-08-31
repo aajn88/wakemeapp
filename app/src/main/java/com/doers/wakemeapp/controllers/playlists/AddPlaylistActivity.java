@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -170,12 +171,18 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
     }
   }
 
+  @SuppressWarnings("WrongConstant")
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
 
     if (requestCode == SONG_REQUEST_ID && resultCode == RESULT_OK) {
       Uri songUri = data.getData();
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        int flags = data.getFlags() &
+                (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        getContentResolver().takePersistableUriPermission(songUri, flags);
+      }
       Log.d(TAG, StringUtils.format("Selected song uri: %s", songUri));
       requestName(songUri);
     }

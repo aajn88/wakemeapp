@@ -148,6 +148,15 @@ public class PlaylistsService implements IPlaylistsService {
     return mPlaylistsManager.createOrUpdate(playlist);
   }
 
+  @Override
+  public Playlist findPlaylistById(int playlistId) {
+    Playlist playlist = mPlaylistsManager.findById(playlistId);
+    if (playlist != null) {
+      playlist.setSongs(mSongsManager.findByPlaylistId(playlistId));
+    }
+    return playlist;
+  }
+
   /**
    * This method gets all stored playlists
    *

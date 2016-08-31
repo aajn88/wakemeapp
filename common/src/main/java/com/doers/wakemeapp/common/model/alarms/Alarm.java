@@ -4,12 +4,14 @@ import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 
+import java.io.Serializable;
+
 /**
  * This is the alarm information and configuration will be stored
  *
  * @author <a href="mailto:aajn88@gmail.com">Antonio Jimenez</a>
  */
-public class Alarm {
+public class Alarm implements Serializable {
 
   /** Alarm ID **/
   @DatabaseField(generatedId = true)
@@ -19,15 +21,15 @@ public class Alarm {
   @DatabaseField(canBeNull = false)
   private String name;
 
-  /** Scheduled days **/
+  /** Scheduled days where first day (0) is Monday **/
   @DatabaseField(dataType = DataType.SERIALIZABLE, canBeNull = false)
   private boolean[] scheduledDays;
 
-  /** Scheduled hour (0-23) **/
+  /** Scheduled hour [0-24) **/
   @DatabaseField(canBeNull = false)
   private Integer hour;
 
-  /** Scheduled minute (0-59) **/
+  /** Scheduled minute [0-60) **/
   @DatabaseField(canBeNull = false)
   private Integer minute;
 

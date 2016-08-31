@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- A fake circle to fix the size of this layer asset. -->
+  <item>
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+           android:shape="oval">
+      <solid android:color="#00000000"/>
+      <size
+        android:width="@dimen/incoming_call_widget_circle_size"
+        android:height="@dimen/incoming_call_widget_circle_size"/>
+    </shape>
+  </item>
+  <item
+    android:bottom="@dimen/incoming_call_widget_asset_margin"
+    android:drawable="@drawable/ic_snooze_orange"
+    android:left="@dimen/incoming_call_widget_asset_margin"
+    android:right="@dimen/incoming_call_widget_asset_margin"
+    android:top="@dimen/incoming_call_widget_asset_margin"/>
+</layer-list>
