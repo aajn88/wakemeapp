@@ -50,7 +50,12 @@ public class AlarmReceiver extends BroadcastReceiver {
     Calendar now = Calendar.getInstance();
     Log.d(TAG, "Alarm launched at: " + DateUtils.format(now.getTime(), "dd/MM/yyyy HH:mm:ss") +
             " for day: " + alarmDay);
-    // TODO: Show notification
+
+    Intent alarmLaunchIntent = new Intent(context, LaunchAlarmActivity.class);
+    alarmLaunchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    alarmLaunchIntent.putExtra(IAlarmsService.ALARM_ID, alarmId);
+    alarmLaunchIntent.putExtra(IAlarmsService.ALARM_DAY, alarmDay);
+    context.startActivity(alarmLaunchIntent);
   }
 
   /**

@@ -39,10 +39,15 @@ public final class IOUtils {
    *         Request Id which will be used to create the file request
    */
   public static void requestAudio(Activity activity, int requestId) {
-    Intent intent_upload = new Intent();
-    intent_upload.setType(AUDIO_REQUEST);
-    intent_upload.setAction(Intent.ACTION_GET_CONTENT);
-    activity.startActivityForResult(intent_upload, requestId);
+    Intent intentRequestAudio;
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+      intentRequestAudio = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+      intentRequestAudio.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+    } else {
+      intentRequestAudio = new Intent(Intent.ACTION_GET_CONTENT);
+    }
+    intentRequestAudio.setType(AUDIO_REQUEST);
+    activity.startActivityForResult(intentRequestAudio, requestId);
   }
 
   /**
@@ -99,7 +104,7 @@ public final class IOUtils {
         result = cursor.getString(idx);
       } catch (IllegalStateException e) {
         Log.e(TAG, "Error getting URI path", e);
-        result = uri.getPath();
+        result = uri.toString();
       }
       cursor.close();
     }

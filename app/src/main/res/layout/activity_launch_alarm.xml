@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context="com.doers.wakemeapp.controllers.alarms.LaunchAlarmActivity">
+
+  <net.frakbot.glowpadbackport.GlowPadView
+    android:id="@+id/alarm_action_gpv"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="-46dp"
+    android:layout_marginTop="-10dp"
+    android:background="@color/material_blue_grey_700"
+    android:gravity="top"
+    android:visibility="visible"
+
+    app:feedbackCount="1"
+    app:glowRadius="@dimen/glowpadview_glow_radius"
+    app:handleDrawable="@drawable/ic_alarm_touch_handle"
+    app:innerRadius="@dimen/glowpadview_inner_radius"
+    app:outerRadius="@dimen/glowpadview_target_placement_radius"
+    app:outerRingDrawable="@drawable/ic_lockscreen_outerring"
+    app:pointDrawable="@drawable/ic_glowdot"
+    app:snapMargin="@dimen/glowpadview_snap_margin"
+    app:targetDrawables="@array/alarm_widget_2way_targets"
+    app:vibrationDuration="20"/>
+
+  <com.doers.wakemeapp.custom_views.font.RobotoTextView
+    android:id="@+id/alarm_title_rtv"
+    style="@style/Display1Style"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="48dp"
+    android:text="Alarm title"
+    android:textColor="@color/white"/>
+
+  <com.doers.wakemeapp.custom_views.font.RobotoTextView
+    android:id="@+id/alarm_time_rtv"
+    style="@style/HeadlineStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/alarm_title_rtv"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="@dimen/extendedVerticalMargin"
+    android:text="10:59"
+    android:textColor="@color/white"/>
+
+</RelativeLayout>
