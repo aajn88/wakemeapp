@@ -178,6 +178,21 @@ public class PlaylistsService implements IPlaylistsService {
     return mPlaylistsManager.findDefaultPlaylist();
   }
 
+  @Override
+  public boolean deletePlaylist(int playlistId) {
+    Playlist playlist = findPlaylistById(playlistId);
+    if (playlist == null) {
+      // The playlist doesn't exist
+      return true;
+    }
+    if (playlist.isDefault()) {
+      return false;
+    }
+
+    mPlaylistsManager.deleteById(playlistId);
+    return true;
+  }
+
   /**
    * This method creates the default playlist if there is no stored playlist
    */

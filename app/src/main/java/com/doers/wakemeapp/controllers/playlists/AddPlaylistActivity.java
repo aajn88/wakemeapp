@@ -96,6 +96,7 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
 
     mNoSongsTv.setVisibility(View.VISIBLE);
     mAddSongFab.setOnClickListener(this);
+
   }
 
   /**

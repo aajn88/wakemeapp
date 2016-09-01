@@ -110,6 +110,27 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
   }
 
   /**
+   * This method returns the playlist at a given position
+   *
+   * @param position
+   *         Position to be consulted
+   */
+  public Playlist getItem(int position) {
+    return mPlaylists.get(position);
+  }
+
+  /**
+   * This method removes a playlist from the adapter
+   *
+   * @param position
+   *         Position to be removed
+   */
+  public void remove(int position) {
+    mPlaylists.remove(position);
+    notifyItemRemoved(position);
+  }
+
+  /**
    * Playlist's View Holder
    */
   private class PlaylistHolder extends ViewHolder {

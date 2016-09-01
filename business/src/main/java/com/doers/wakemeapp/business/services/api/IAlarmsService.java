@@ -57,6 +57,18 @@ public interface IAlarmsService {
   Alarm getDefaultAlarm();
 
   /**
+   * This method deletes a playlist. In case any of the alarms had this playlist, then default
+   * playlist is set
+   *
+   * @param playlistId
+   *         Playlist ID to be deleted
+   *
+   * @return True if it was deleted. False if the intended playlist to be deleted is the default
+   * playlist
+   */
+  boolean deletePlaylist(int playlistId);
+
+  /**
    * This method snoozes the given alarm for the established time
    *
    * @param alarmId

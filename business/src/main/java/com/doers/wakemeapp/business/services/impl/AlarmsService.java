@@ -11,6 +11,7 @@ import com.doers.wakemeapp.business.R;
 import com.doers.wakemeapp.business.services.api.IAlarmsService;
 import com.doers.wakemeapp.business.services.api.IPlaylistsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
+import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.common.utils.DateUtils;
 import com.doers.wakemeapp.persistence.managers.api.IAlarmsManager;
 
@@ -222,6 +223,26 @@ public class AlarmsService implements IAlarmsService {
     defaultAlarm.setEnable(true);
 
     return defaultAlarm;
+  }
+
+  @Override
+  public boolean deletePlaylist(int playlistId) {
+    Playlist playlist = mPlaylistsService.findPlaylistById(playlistId);
+    if (playlist == null) {
+      // The playlist has been already deleted or not exists
+      return true;
+    }
+    if (playlist.isDefault()) {
+      return false;
+    }
+    Playlist defaultPlaylist = mPlaylistsService.getDefaultPlaylist();
+    List<Alarm> alarms = mAlarmsManager.findByPlaylistId(playlistId);
+    for (Alarm alarm : alarms) {
+      alarm.setPlaylist(defaultPlaylist);
+      setUpAlarm(alarm);
+    }
+    mPlaylistsService.deletePlaylist(playlistId);
+    return true;
   }
 
   @Override

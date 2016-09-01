@@ -31,6 +31,7 @@
   <string name="playlist_name">Playlist name</string>
   <string name="playlist_created">Playlist successfully created</string>
   <string name="discard_playlist_msg">Discard playlist?</string>
+  <string name="default_playlist_cannot_delete">Default playlist cannot be deleted</string>
 
   <!-- Add song -->
   <string name="no_songs">You have no songs. Add the first one!</string>
