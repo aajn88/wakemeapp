@@ -123,11 +123,18 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
         savePlaylist();
         return true;
       case android.R.id.home:
-        confirmExit(this, null, R.string.discard_playlist_msg, R.string.discard);
+        confirmExit();
         return true;
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  /**
+   * This method confirms the exit
+   */
+  private void confirmExit() {
+    confirmExit(this, null, R.string.discard_playlist_msg, R.string.discard);
   }
 
   /**
@@ -213,5 +220,10 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
               }
             }).setNegativeButton(R.string.cancel, null);
     builder.show();
+  }
+
+  @Override
+  public void onBackPressed() {
+    confirmExit();
   }
 }

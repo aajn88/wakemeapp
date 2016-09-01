@@ -30,6 +30,9 @@ public class AlarmsService implements IAlarmsService {
   /** Tag for logs **/
   private static final String TAG = AlarmsService.class.getSimpleName();
 
+  /** The default time for snoozing alarms (in millis) **/
+  private static final int DEFAULT_SNOOZE_TIME = 5 * 60 * 1000;
+
   /** Alarm wake up **/
   private static final String ALARM_WAKE_UP = "com.doers.wakemeapp.ALARM_WAKE_UP";
 
@@ -122,7 +125,6 @@ public class AlarmsService implements IAlarmsService {
     Intent alarmIntent = new Intent(ALARM_WAKE_UP);
     alarmIntent.putExtra(ALARM_ID, alarm.getId());
     alarmIntent.putExtra(ALARM_DAY, day);
-    alarmIntent.putExtra(ALARM_LAUNCHING_TIME, nextAlarmMillis);
     PendingIntent pi = PendingIntent.getBroadcast(mContext, alarmId, alarmIntent,
             PendingIntent.FLAG_UPDATE_CURRENT);
     String action;
@@ -220,6 +222,46 @@ public class AlarmsService implements IAlarmsService {
     defaultAlarm.setEnable(true);
 
     return defaultAlarm;
+  }
+
+  @Override
+  public void snoozeAlarm(int alarmId, int day) {
+    Alarm alarm = findAlarmById(alarmId);
+    if (alarm == null) {
+      return;
+    }
+
+    int requestCode = alarmId * THRESHOLD_MILLIS + 1;
+    AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+    Intent alarmIntent = new Intent(ALARM_WAKE_UP);
+    alarmIntent.putExtra(ALARM_ID, alarm.getId());
+    alarmIntent.putExtra(ALARM_DAY, day);
+    PendingIntent pi = PendingIntent.getBroadcast(mContext, requestCode, alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT);
+    Calendar now = Calendar.getInstance();
+    now.set(Calendar.SECOND, 0);
+    long nextAlarmMillis = now.getTimeInMillis() + DEFAULT_SNOOZE_TIME;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      am.setWindow(AlarmManager.RTC_WAKEUP, nextAlarmMillis - THRESHOLD_MILLIS, 0, pi);
+    } else {
+      am.set(AlarmManager.RTC_WAKEUP, nextAlarmMillis - THRESHOLD_MILLIS, pi);
+    }
+
+    Log.d(TAG, "Alarm snoozed for day: " + day + " at " +
+            DateUtils.format(new Date(nextAlarmMillis), DateUtils.DEFAULT_FORMAT));
+  }
+
+  @Override
+  public void deleteAlarm(int alarmId) {
+    Alarm alarm = findAlarmById(alarmId);
+    if (alarm == null) {
+      return;
+    }
+
+    alarm.setEnable(false);
+    setUpAlarm(alarm);
+    mAlarmsManager.deleteById(alarmId);
+    Log.d(TAG, "The alarm " + alarmId + " has been deleted");
   }
 
   /**

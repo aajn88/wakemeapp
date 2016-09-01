@@ -79,6 +79,9 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
   /** The received alarm **/
   private Alarm mCurrentAlarm;
 
+  /** The alarm day **/
+  private int mAlarmDay;
+
   /** System vibrator **/
   private Vibrator mVibrator;
 
@@ -95,9 +98,10 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_launch_alarm);
-    mCurrentAlarm =
-            mAlarmsService.findAlarmById(getIntent().getIntExtra(IAlarmsService.ALARM_ID, -1));
-    if (mCurrentAlarm == null) {
+    Intent intent = getIntent();
+    mCurrentAlarm = mAlarmsService.findAlarmById(intent.getIntExtra(IAlarmsService.ALARM_ID, -1));
+    mAlarmDay = intent.getIntExtra(IAlarmsService.ALARM_DAY, -1);
+    if (mCurrentAlarm == null || mAlarmDay == -1) {
       finish();
       return;
     }
@@ -222,6 +226,8 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
     if (mAlarmMediaPlayer != null && mAlarmMediaPlayer.isPlaying()) {
       mAlarmMediaPlayer.stop();
     }
+    // To make sure the alarm is always up to date
+    mAlarmsService.setUpAlarm(mCurrentAlarm);
   }
 
   /**
@@ -237,7 +243,7 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
    */
   private void snoozeAlarm() {
     Log.i(TAG, "Snoozing alarm");
-    // TODO: Snooze alarm
+    mAlarmsService.snoozeAlarm(mCurrentAlarm.getId(), mAlarmDay);
     finish();
   }
 

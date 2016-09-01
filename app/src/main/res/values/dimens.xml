@@ -9,6 +9,10 @@
   <dimen name="extendedVerticalMargin">24dp</dimen>
   <dimen name="extendedHorizontalMargin">24dp</dimen>
 
+  <!-- Lists heights -->
+  <dimen name="single_item_height">48dp</dimen>
+  <dimen name="single_item_icon_height">56dp</dimen>
+
   <!-- Elevations -->
   <dimen name="actionBarElevation">12dp</dimen>
   <dimen name="cardRestingElevation">4dp</dimen>

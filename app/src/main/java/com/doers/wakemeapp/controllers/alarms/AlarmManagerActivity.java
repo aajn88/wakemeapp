@@ -3,6 +3,7 @@ package com.doers.wakemeapp.controllers.alarms;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.TextView;
 
@@ -66,6 +67,13 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
     mAddPlaylistFab.setOnClickListener(this);
     mAddAlarmFab.setOnClickListener(this);
 
+    setUpRecyclerView();
+  }
+
+  /**
+   * This method sets up the recycler view
+   */
+  private void setUpRecyclerView() {
     mAlarmsRv.setLayoutManager(new LinearLayoutManager(this));
     mAlarmsRv.addItemDecoration(new InitialSpaceItemDecoration(
             (int) getResources().getDimension(R.dimen.condensedVerticalMargin)));
@@ -76,6 +84,23 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
     }
     mAdapter = new AlarmsAdapter(this, alarms);
     mAlarmsRv.setAdapter(mAdapter);
+
+    ItemTouchHelper.SimpleCallback callback =
+            new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+              @Override
+              public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                    RecyclerView.ViewHolder target) {
+                return false;
+              }
+
+              @Override
+              public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                mAdapter.deleteAlarm(viewHolder.getAdapterPosition());
+              }
+            };
+
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+    itemTouchHelper.attachToRecyclerView(mAlarmsRv);
   }
 
   /**
@@ -94,16 +119,23 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
     switch (view.getId()) {
       case R.id.add_playlist_fab:
         PlaylistsManagerActivity.startActivity(this);
+        mAlarmsFam.close(true);
         break;
       case R.id.add_alarm_fab:
         mAdapter.addAlarm();
         mNoAlarmsTv.setVisibility(View.GONE);
+        mAlarmsRv.scrollToPosition(mAdapter.getItemCount() - 1);
+        mAlarmsFam.close(true);
         break;
     }
   }
 
   @Override
   public void onBackPressed() {
-    finishAffinity();
+    if (mAlarmsFam.isOpened()) {
+      mAlarmsFam.close(true);
+    } else {
+      finishAffinity();
+    }
   }
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.business.services.api.IPlaylistsService;
 import com.doers.wakemeapp.controllers.common.BaseActivity;
+import com.doers.wakemeapp.custom_views.decorations.InitialSpaceItemDecoration;
 import com.doers.wakemeapp.di.components.DiComponent;
 
 import javax.inject.Inject;
@@ -65,6 +66,8 @@ public class PlaylistsManagerActivity extends BaseActivity implements View.OnCli
 
     mAddPlaylistFab.setOnClickListener(this);
     mPlaylistsRv.setLayoutManager(new LinearLayoutManager(this));
+    mPlaylistsRv.addItemDecoration(new InitialSpaceItemDecoration(
+            (int) getResources().getDimension(R.dimen.condensedVerticalMargin)));
     mPlaylistsRv.setAdapter(new PlaylistsAdapter(this, mPlaylistsService.getAllPlaylists()));
   }
 
