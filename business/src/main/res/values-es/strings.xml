@@ -1,0 +1,10 @@
+<resources>
+  <string name="app_name">Business</string>
+
+  <string name="playlist_default_title">Título</string>
+
+  <!-- Default values -->
+  <string name="default_playlist_name">Por defecto</string>
+  <string name="default_song_name">Alarma por defecto</string>
+
+</resources>
