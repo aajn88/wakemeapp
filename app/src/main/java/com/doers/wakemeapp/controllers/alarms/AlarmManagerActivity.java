@@ -66,6 +66,7 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
 
     mAddPlaylistFab.setOnClickListener(this);
     mAddAlarmFab.setOnClickListener(this);
+    mNoAlarmsTv.setOnClickListener(this);
 
     setUpRecyclerView();
   }
@@ -128,6 +129,7 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
         mAlarmsFam.close(true);
         break;
       case R.id.add_alarm_fab:
+      case R.id.no_alarms_tv:
         mAdapter.addAlarm();
         mNoAlarmsTv.setVisibility(View.GONE);
         mAlarmsRv.scrollToPosition(mAdapter.getItemCount() - 1);

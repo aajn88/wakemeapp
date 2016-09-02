@@ -45,13 +45,18 @@
   </com.github.clans.fab.FloatingActionMenu>
 
   <com.doers.wakemeapp.custom_views.font.RobotoTextView
-    android:id="@+id/no_alarms_tv"
-    style="@style/SubheadingStyle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:text="@string/no_alarms"
-    android:textColor="@color/colorAccent"
-    android:visibility="gone"/>
+      android:id="@+id/no_alarms_tv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:background="?android:attr/selectableItemBackground"
+      android:paddingBottom="@dimen/thinVerticalMargin"
+      android:paddingLeft="@dimen/condensedHorizontalMargin"
+      android:paddingRight="@dimen/condensedHorizontalMargin"
+      android:paddingTop="@dimen/thinVerticalMargin"
+      android:text="@string/no_alarms"
+      android:textColor="@color/colorAccent"
+      android:visibility="gone"
+      style="@style/SubheadingStyle"/>
 
 </RelativeLayout>
