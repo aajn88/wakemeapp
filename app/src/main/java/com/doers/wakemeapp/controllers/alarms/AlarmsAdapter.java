@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,9 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
 
   /** List of available playlists **/
   private List<Playlist> mPlaylists;
+
+  /** Alarm deletion to be confirmed {@code Pair<Position, Alarm>} **/
+  private Pair<Integer, Alarm> mPendingDeletionConfirm;
 
   /**
    * Constructor
@@ -393,10 +397,34 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
    * @param position
    *         Position to be deleted
    */
-  public void deleteAlarm(int position) {
+  public void partiallyDeleteAlarm(int position) {
+    confirmDeletion();
     Alarm alarm = mAlarms.remove(position);
-    mAlarmsService.deleteAlarm(alarm.getId());
     notifyItemRemoved(position);
+    mPendingDeletionConfirm = new Pair<>(position, alarm);
+  }
+
+  /**
+   *  This method confirms the deletion transaction
+   */
+  public void cancelDeletion() {
+    if(mPendingDeletionConfirm == null) {
+      return;
+    }
+    mAlarms.add(mPendingDeletionConfirm.first, mPendingDeletionConfirm.second);
+    notifyItemInserted(mPendingDeletionConfirm.first);
+    mPendingDeletionConfirm = null;
+  }
+
+  /**
+   * This method confirms the pending deletion
+   */
+  public void confirmDeletion() {
+    if(mPendingDeletionConfirm == null) {
+      return;
+    }
+    mAlarmsService.deleteAlarm(mPendingDeletionConfirm.second.getId());
+    mPendingDeletionConfirm = null;
   }
 
   public void refreshAlarms() {
