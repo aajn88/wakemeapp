@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import android.view.Menu;
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.di.WakeMeAppApplication;
 import com.doers.wakemeapp.di.components.DiComponent;
@@ -43,6 +44,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     if (mToolbar != null) {
       setSupportActionBar(mToolbar);
     }
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_base, menu);
+    return true;
   }
 
   /**
