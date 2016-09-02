@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">WakeMeApp</string>
+
+  <!-- Icons title -->
+  <string name="check_title">Verifica ícono</string>
+
+</resources>
