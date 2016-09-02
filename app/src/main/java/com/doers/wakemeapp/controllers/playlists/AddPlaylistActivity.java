@@ -127,14 +127,15 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
       mPlaylist = mPlaylistsService.findPlaylistById(playlistId);
       mAdapter = new SongsAdapter(this, mPlaylist.getSongs());
       mPlaylistNameEt.setText(mPlaylist.getName());
+      mNoSongsTv.setVisibility(View.GONE);
     } else {
       mAdapter = new SongsAdapter(this);
+      mNoSongsTv.setVisibility(View.VISIBLE);
     }
 
     mPlaylistSongsRv.setLayoutManager(new LinearLayoutManager(this));
     mPlaylistSongsRv.setAdapter(mAdapter);
 
-    mNoSongsTv.setVisibility(View.VISIBLE);
     mAddSongFab.setOnClickListener(this);
 
   }
