@@ -30,4 +30,8 @@
     <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
   </style>
 
+  <style name="CardViewTheme" parent="CardView">
+    <item name="cardElevation">?attr/cardRestingElevation</item>
+  </style>
+
 </resources>
