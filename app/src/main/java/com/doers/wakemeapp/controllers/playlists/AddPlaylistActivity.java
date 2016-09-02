@@ -137,7 +137,14 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
     mPlaylistSongsRv.setAdapter(mAdapter);
 
     mAddSongFab.setOnClickListener(this);
+    mNoSongsTv.setOnClickListener(this);
 
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    mAdapter.onStop();
   }
 
   /**
@@ -221,6 +228,7 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.add_song_fab:
+      case R.id.no_songs_tv:
         IOUtils.requestAudio(this, SONG_REQUEST_ID);
         break;
     }
