@@ -26,9 +26,7 @@
 
   </style>
 
-  <style name="CardViewTheme" parent="CardView">
-    <item name="cardElevation">?attr/cardRestingElevation</item>
-  </style>
+  <style name="CardViewTheme" parent="CardView"/>
 
   <style name="FabTheme.Mini" parent="FabTheme">
     <item name="fab_size">mini</item>
