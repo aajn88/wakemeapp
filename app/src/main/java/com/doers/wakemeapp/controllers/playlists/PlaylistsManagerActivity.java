@@ -109,6 +109,7 @@ public class PlaylistsManagerActivity extends BaseActivity implements View.OnCli
               .show();
     } else {
       mAdapter.remove(position);
+      Snackbar.make(mPlaylistsRv, R.string.playlist_deleted, Snackbar.LENGTH_SHORT).show();
     }
   }
 

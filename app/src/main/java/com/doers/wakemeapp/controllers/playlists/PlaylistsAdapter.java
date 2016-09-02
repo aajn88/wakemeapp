@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.common.model.audio.Playlist;
+import com.doers.wakemeapp.custom_views.common.Snackbar;
 
 import java.util.List;
 
@@ -105,6 +106,10 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
     vh.mContainer.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
+        if (playlist.isDefault()) {
+          Snackbar.make(view, R.string.default_playlist_cannot_edit, Snackbar.LENGTH_SHORT).show();
+          return;
+        }
         AddPlaylistActivity.startActivity((Activity) mContext, playlist.getId(),
                 AddPlaylistActivity.EDIT_PLAYLIST_REQUEST_CODE);
       }
