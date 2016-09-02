@@ -11,6 +11,7 @@
 
   <!-- Error messages -->
   <string name="mandatory_field">No olvides este campo</string>
+  <string name="empty_alarm_name">Por favor, añade un nombre</string>
   <string name="empty_playlist_error">Por favor, añade al menos una canción</string>
 
   <!-- Week days -->
