@@ -26,6 +26,7 @@ import com.doers.wakemeapp.business.services.api.IPlaylistsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
 import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.common.utils.DateUtils;
+import com.doers.wakemeapp.custom_views.common.Snackbar;
 import com.doers.wakemeapp.custom_views.common.TimePickerFragment;
 import com.doers.wakemeapp.custom_views.font.RobotoTextView;
 import com.doers.wakemeapp.di.WakeMeAppApplication;
@@ -191,7 +192,12 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     vh.mConfirmIv.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        alarm.setName(vh.mTitleEt.getText().toString().trim());
+        String newTitle = vh.mTitleEt.getText().toString().trim();
+        if (newTitle.isEmpty()) {
+          Snackbar.make(view, R.string.empty_alarm_name, Snackbar.LENGTH_SHORT).show();
+          return;
+        }
+        alarm.setName(newTitle);
         updateAlarm(vh.getAdapterPosition());
         setUpTitle(vh, alarm);
         showEditTitle(vh, false);
