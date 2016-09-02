@@ -1,5 +1,6 @@
 package com.doers.wakemeapp.controllers.playlists;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.common.model.audio.Playlist;
+import com.doers.wakemeapp.custom_views.common.Snackbar;
 
 import java.util.List;
 
@@ -23,6 +25,9 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
 
   /** Playlists list **/
   private final List<Playlist> mPlaylists;
+
+  /** Context **/
+  private final Context mContext;
 
   /** Layout inflater **/
   private final LayoutInflater mInflater;
@@ -37,6 +42,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
    */
   public PlaylistsAdapter(Context context, List<Playlist> mPlaylists) {
     this.mPlaylists = mPlaylists;
+    mContext = context;
     mInflater = LayoutInflater.from(context);
   }
 
@@ -93,10 +99,21 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
   @Override
   public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     PlaylistHolder vh = (PlaylistHolder) holder;
-    Playlist playlist = mPlaylists.get(position);
+    final Playlist playlist = mPlaylists.get(position);
 
     vh.mNameTv.setText(playlist.getName());
     vh.mSongsNumberTv.setText(Integer.toString(playlist.getSongs().size()));
+    vh.mContainer.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (playlist.isDefault()) {
+          Snackbar.make(view, R.string.default_playlist_cannot_edit, Snackbar.LENGTH_SHORT).show();
+          return;
+        }
+        AddPlaylistActivity.startActivity((Activity) mContext, playlist.getId(),
+                AddPlaylistActivity.EDIT_PLAYLIST_REQUEST_CODE);
+      }
+    });
   }
 
   /**
@@ -110,9 +127,33 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
   }
 
   /**
+   * This method returns the playlist at a given position
+   *
+   * @param position
+   *         Position to be consulted
+   */
+  public Playlist getItem(int position) {
+    return mPlaylists.get(position);
+  }
+
+  /**
+   * This method removes a playlist from the adapter
+   *
+   * @param position
+   *         Position to be removed
+   */
+  public void remove(int position) {
+    mPlaylists.remove(position);
+    notifyItemRemoved(position);
+  }
+
+  /**
    * Playlist's View Holder
    */
   private class PlaylistHolder extends ViewHolder {
+
+    /** Container **/
+    View mContainer;
 
     /** Name TextView **/
     TextView mNameTv;
@@ -129,6 +170,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
     public PlaylistHolder(View itemView) {
       super(itemView);
 
+      mContainer = itemView;
       mNameTv = (TextView) itemView.findViewById(R.id.text_tv);
       mSongsNumberTv = (TextView) itemView.findViewById(R.id.number_tv);
     }

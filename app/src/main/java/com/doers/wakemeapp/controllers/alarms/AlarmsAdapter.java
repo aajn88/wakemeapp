@@ -393,6 +393,11 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
     notifyItemRemoved(position);
   }
 
+  public void refreshAlarms() {
+    mPlaylists = null;
+    notifyDataSetChanged();
+  }
+
   /**
    * Alarm ViewHolder
    */
