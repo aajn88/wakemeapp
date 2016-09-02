@@ -143,7 +143,7 @@ public class PlaylistsService implements IPlaylistsService {
     validatePlaylistFields(name, songs);
 
     playlist.setName(name);
-    playlist.setSongs(songs);
+    persistSongs(songs, playlist);
 
     return mPlaylistsManager.createOrUpdate(playlist);
   }
@@ -176,6 +176,21 @@ public class PlaylistsService implements IPlaylistsService {
   @Override
   public Playlist getDefaultPlaylist() {
     return mPlaylistsManager.findDefaultPlaylist();
+  }
+
+  @Override
+  public boolean deletePlaylist(int playlistId) {
+    Playlist playlist = findPlaylistById(playlistId);
+    if (playlist == null) {
+      // The playlist doesn't exist
+      return true;
+    }
+    if (playlist.isDefault()) {
+      return false;
+    }
+
+    mPlaylistsManager.deleteById(playlistId);
+    return true;
   }
 
   /**

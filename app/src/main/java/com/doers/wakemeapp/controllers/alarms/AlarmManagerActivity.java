@@ -70,6 +70,12 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
     setUpRecyclerView();
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+    mAdapter.refreshAlarms();
+  }
+
   /**
    * This method sets up the recycler view
    */

@@ -61,4 +61,16 @@ public interface IPlaylistsService {
    * @return The default playlist
    */
   Playlist getDefaultPlaylist();
+
+  /**
+   * This method deletes a playlist given its ID. If the target playlist is the default playlist,
+   * then deletion is aborted
+   *
+   * @param playlistId
+   *         Target playlist ID
+   *
+   * @return True if the playlist was deleted. False if the targeted playlist is the default
+   * playlist and the deletion process wasn't successful
+   */
+  boolean deletePlaylist(int playlistId);
 }

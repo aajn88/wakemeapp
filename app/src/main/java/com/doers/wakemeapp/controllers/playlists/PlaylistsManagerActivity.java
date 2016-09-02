@@ -4,15 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.business.services.api.IPlaylistsService;
+import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.controllers.common.BaseActivity;
+import com.doers.wakemeapp.custom_views.common.Snackbar;
 import com.doers.wakemeapp.custom_views.decorations.InitialSpaceItemDecoration;
 import com.doers.wakemeapp.di.components.DiComponent;
 
@@ -42,6 +44,9 @@ public class PlaylistsManagerActivity extends BaseActivity implements View.OnCli
   @Inject
   IPlaylistsService mPlaylistsService;
 
+  /** The playlists adapter **/
+  private PlaylistsAdapter mAdapter;
+
   /**
    * This method starts Playlists Manager Activity given a context
    *
@@ -68,7 +73,44 @@ public class PlaylistsManagerActivity extends BaseActivity implements View.OnCli
     mPlaylistsRv.setLayoutManager(new LinearLayoutManager(this));
     mPlaylistsRv.addItemDecoration(new InitialSpaceItemDecoration(
             (int) getResources().getDimension(R.dimen.condensedVerticalMargin)));
-    mPlaylistsRv.setAdapter(new PlaylistsAdapter(this, mPlaylistsService.getAllPlaylists()));
+    loadPlaylists();
+
+    ItemTouchHelper.SimpleCallback callback =
+            new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+              @Override
+              public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                                    RecyclerView.ViewHolder target) {
+                return false;
+              }
+
+              @Override
+              public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                deletePlaylist(viewHolder.getAdapterPosition());
+              }
+            };
+
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+    itemTouchHelper.attachToRecyclerView(mPlaylistsRv);
+  }
+
+  /**
+   * This method loads the stored playlists
+   */
+  private void loadPlaylists() {
+    mAdapter = new PlaylistsAdapter(this, mPlaylistsService.getAllPlaylists());
+    mPlaylistsRv.setAdapter(mAdapter);
+  }
+
+  private void deletePlaylist(int position) {
+    Playlist playlist = mAdapter.getItem(position);
+    if (!mPlaylistsService.deletePlaylist(playlist.getId())) {
+      mAdapter.notifyItemChanged(position);
+      Snackbar.make(mPlaylistsRv, R.string.default_playlist_cannot_delete, Snackbar.LENGTH_SHORT)
+              .show();
+    } else {
+      mAdapter.remove(position);
+      Snackbar.make(mPlaylistsRv, R.string.playlist_deleted, Snackbar.LENGTH_SHORT).show();
+    }
   }
 
   @Override
@@ -105,8 +147,13 @@ public class PlaylistsManagerActivity extends BaseActivity implements View.OnCli
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
 
-    if (requestCode == ADD_PLAYLIST_REQUEST_CODE && resultCode == RESULT_OK) {
-      Snackbar.make(mPlaylistsRv, R.string.playlist_created, Snackbar.LENGTH_SHORT).show();
+    if (requestCode == ADD_PLAYLIST_REQUEST_CODE ||
+            requestCode == AddPlaylistActivity.EDIT_PLAYLIST_REQUEST_CODE &&
+                    resultCode == RESULT_OK) {
+      int msg = requestCode == ADD_PLAYLIST_REQUEST_CODE ? R.string.playlist_created :
+              R.string.playlist_saved;
+      loadPlaylists();
+      Snackbar.make(mPlaylistsRv, msg, Snackbar.LENGTH_SHORT).show();
     }
   }
 }

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.doers.wakemeapp">
 
+  <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
@@ -39,6 +40,10 @@
 
     <activity android:name=".controllers.alarms.LaunchAlarmActivity">
     </activity>
+    <meta-data
+      android:name="io.fabric.ApiKey"
+      android:value="97da131052aaea309fc8753ecd7169a0b8e605bb"/>
   </application>
 
+  <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

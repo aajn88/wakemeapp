@@ -13,6 +13,9 @@ import java.io.Serializable;
  */
 public class Alarm implements Serializable {
 
+  /** Playlist ID column name **/
+  public static final String PLAYLIST_ID = "playlist_id";
+
   /** Alarm ID **/
   @DatabaseField(generatedId = true)
   private Integer id;
@@ -34,7 +37,7 @@ public class Alarm implements Serializable {
   private Integer minute;
 
   /** Playlist **/
-  @DatabaseField(foreign = true, foreignAutoRefresh = true)
+  @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = PLAYLIST_ID)
   private Playlist playlist;
 
   /** Is enable? **/

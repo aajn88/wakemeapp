@@ -40,6 +40,17 @@ public class SongsAdapter extends RecyclerView.Adapter {
   }
 
   /**
+   * Songs adapter constructor given the songs list
+   *
+   * @param context
+   *         App context
+   */
+  public SongsAdapter(Context context, List<Song> songs) {
+    mSongs = songs;
+    mInflater = LayoutInflater.from(context);
+  }
+
+  /**
    * Called when RecyclerView needs a new {@link ViewHolder} of the given type to represent an
    * item.
    * <p/>
