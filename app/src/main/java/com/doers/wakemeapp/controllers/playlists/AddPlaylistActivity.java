@@ -22,11 +22,14 @@ import android.widget.TextView;
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.business.services.api.IPlaylistsService;
 import com.doers.wakemeapp.business.utils.IOUtils;
+import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.common.model.audio.Song;
 import com.doers.wakemeapp.common.utils.StringUtils;
 import com.doers.wakemeapp.controllers.common.BaseActivity;
 import com.doers.wakemeapp.di.components.DiComponent;
 import com.doers.wakemeapp.utils.ViewUtils;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -42,8 +45,14 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
   /** Tag for logs **/
   private static final String TAG = AddPlaylistActivity.class.getName();
 
+  /** Playlist ID **/
+  private static final String PLAYLIST_ID = "PLAYLIST_ID";
+
   /** Song request ID **/
   private static final int SONG_REQUEST_ID = 16;
+
+  /** Edit playlist request code **/
+  public static final int EDIT_PLAYLIST_REQUEST_CODE = 123;
 
   /** Add song FAB **/
   @BindView(R.id.add_song_fab)
@@ -68,18 +77,41 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
   /** Songs adapter **/
   private SongsAdapter mAdapter;
 
+  /** Playlist to be edited **/
+  private Playlist mPlaylist;
+
   /**
-   * This method starts Add Playlists Activity given a context
+   * This method starts Add Playlists Activity given a context and the request code
    *
    * @param activity
    *         Application context
+   * @param requestCode
+   *         Request code for result
    */
   public static void startActivity(Activity activity, int requestCode) {
+    startActivity(activity, null, requestCode);
+  }
+
+  /**
+   * This method starts Add Playlists Activity given a context a playlistId to be edited and the
+   * request code
+   *
+   * @param activity
+   *         Application context
+   * @param playlistId
+   *         PlaylistId to be edited. If null, then add playlist process is performed
+   * @param requestCode
+   *         Request code for result
+   */
+  public static void startActivity(Activity activity, Integer playlistId, int requestCode) {
     if (activity == null) {
       return;
     }
 
     Intent intent = new Intent(activity, AddPlaylistActivity.class);
+    if (playlistId != null) {
+      intent.putExtra(PLAYLIST_ID, playlistId);
+    }
     activity.startActivityForResult(intent, requestCode);
   }
 
@@ -90,8 +122,16 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     setTitle(null);
 
+    int playlistId = getIntent().getIntExtra(PLAYLIST_ID, -1);
+    if (playlistId != -1) {
+      mPlaylist = mPlaylistsService.findPlaylistById(playlistId);
+      mAdapter = new SongsAdapter(this, mPlaylist.getSongs());
+      mPlaylistNameEt.setText(mPlaylist.getName());
+    } else {
+      mAdapter = new SongsAdapter(this);
+    }
+
     mPlaylistSongsRv.setLayoutManager(new LinearLayoutManager(this));
-    mAdapter = new SongsAdapter(this);
     mPlaylistSongsRv.setAdapter(mAdapter);
 
     mNoSongsTv.setVisibility(View.VISIBLE);
@@ -146,7 +186,13 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
       return;
     }
 
-    mPlaylistsService.createPlaylist(mPlaylistNameEt.getText().toString(), mAdapter.getSongs());
+    String playlistName = mPlaylistNameEt.getText().toString();
+    List<Song> songs = mAdapter.getSongs();
+    if (mPlaylist != null) {
+      mPlaylistsService.updatePlaylist(mPlaylist.getId(), playlistName, songs);
+    } else {
+      mPlaylistsService.createPlaylist(playlistName, songs);
+    }
     setResult(RESULT_OK);
     finish();
   }
@@ -227,4 +273,5 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
   public void onBackPressed() {
     confirmExit();
   }
+
 }

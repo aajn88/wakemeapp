@@ -1,5 +1,6 @@
 package com.doers.wakemeapp.controllers.playlists;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -24,6 +25,9 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
   /** Playlists list **/
   private final List<Playlist> mPlaylists;
 
+  /** Context **/
+  private final Context mContext;
+
   /** Layout inflater **/
   private final LayoutInflater mInflater;
 
@@ -37,6 +41,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
    */
   public PlaylistsAdapter(Context context, List<Playlist> mPlaylists) {
     this.mPlaylists = mPlaylists;
+    mContext = context;
     mInflater = LayoutInflater.from(context);
   }
 
@@ -93,10 +98,17 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
   @Override
   public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     PlaylistHolder vh = (PlaylistHolder) holder;
-    Playlist playlist = mPlaylists.get(position);
+    final Playlist playlist = mPlaylists.get(position);
 
     vh.mNameTv.setText(playlist.getName());
     vh.mSongsNumberTv.setText(Integer.toString(playlist.getSongs().size()));
+    vh.mContainer.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        AddPlaylistActivity.startActivity((Activity) mContext, playlist.getId(),
+                AddPlaylistActivity.EDIT_PLAYLIST_REQUEST_CODE);
+      }
+    });
   }
 
   /**
@@ -135,6 +147,9 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
    */
   private class PlaylistHolder extends ViewHolder {
 
+    /** Container **/
+    View mContainer;
+
     /** Name TextView **/
     TextView mNameTv;
 
@@ -150,6 +165,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
     public PlaylistHolder(View itemView) {
       super(itemView);
 
+      mContainer = itemView;
       mNameTv = (TextView) itemView.findViewById(R.id.text_tv);
       mSongsNumberTv = (TextView) itemView.findViewById(R.id.number_tv);
     }

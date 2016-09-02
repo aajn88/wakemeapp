@@ -143,7 +143,7 @@ public class PlaylistsService implements IPlaylistsService {
     validatePlaylistFields(name, songs);
 
     playlist.setName(name);
-    playlist.setSongs(songs);
+    persistSongs(songs, playlist);
 
     return mPlaylistsManager.createOrUpdate(playlist);
   }

@@ -146,10 +146,13 @@ public class PlaylistsManagerActivity extends BaseActivity implements View.OnCli
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
 
-    if (requestCode == ADD_PLAYLIST_REQUEST_CODE && resultCode == RESULT_OK) {
+    if (requestCode == ADD_PLAYLIST_REQUEST_CODE ||
+            requestCode == AddPlaylistActivity.EDIT_PLAYLIST_REQUEST_CODE &&
+                    resultCode == RESULT_OK) {
+      int msg = requestCode == ADD_PLAYLIST_REQUEST_CODE ? R.string.playlist_created :
+              R.string.playlist_saved;
       loadPlaylists();
-      Snackbar.make(mPlaylistsRv, R.string.playlist_created, Snackbar.LENGTH_SHORT)
-              .show();
+      Snackbar.make(mPlaylistsRv, msg, Snackbar.LENGTH_SHORT).show();
     }
   }
 }

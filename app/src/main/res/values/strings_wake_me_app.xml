@@ -30,6 +30,7 @@
   <!-- Add playlist -->
   <string name="playlist_name">Playlist name</string>
   <string name="playlist_created">Playlist successfully created</string>
+  <string name="playlist_saved">Playlist successfully saved</string>
   <string name="discard_playlist_msg">Discard playlist?</string>
   <string name="default_playlist_cannot_delete">Default playlist cannot be deleted</string>
 
