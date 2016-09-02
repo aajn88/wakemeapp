@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?android:attr/listPreferredItemHeight">
-
-  <com.doers.wakemeapp.custom_views.font.RobotoTextView
-    android:id="@+id/text_tv"
-    style="@style/SubheadingStyle"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_centerInParent="true"
-    android:layout_marginEnd="@dimen/condensedHorizontalMargin"
-    android:layout_marginLeft="@dimen/standardHorizontalMargin"
-    android:layout_marginRight="@dimen/condensedHorizontalMargin"
-    android:layout_marginStart="@dimen/standardHorizontalMargin"
-    android:layout_toLeftOf="@+id/selectable_cb"
-    android:layout_toStartOf="@+id/selectable_cb"/>
+    android:background="?attr/selectableItemBackground"
+    android:minHeight="?android:attr/listPreferredItemHeight">
+
+  <com.doers.wakemeapp.custom_views.font.RobotoTextView
+      android:id="@+id/text_tv"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:layout_marginEnd="@dimen/condensedHorizontalMargin"
+      android:layout_marginLeft="@dimen/standardHorizontalMargin"
+      android:layout_marginRight="@dimen/condensedHorizontalMargin"
+      android:layout_marginStart="@dimen/standardHorizontalMargin"
+      android:layout_toLeftOf="@+id/selectable_cb"
+      android:layout_toStartOf="@+id/selectable_cb"
+      style="@style/SubheadingStyle"/>
 
   <CheckBox
-    android:id="@+id/selectable_cb"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
-    android:layout_centerVertical="true"
-    android:layout_marginEnd="@dimen/standardHorizontalMargin"
-    android:layout_marginLeft="@dimen/condensedHorizontalMargin"
-    android:layout_marginRight="@dimen/standardHorizontalMargin"
-    android:layout_marginStart="@dimen/condensedHorizontalMargin"/>
+      android:id="@+id/selectable_cb"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:layout_marginEnd="@dimen/standardHorizontalMargin"
+      android:layout_marginLeft="@dimen/condensedHorizontalMargin"
+      android:layout_marginRight="@dimen/standardHorizontalMargin"
+      android:layout_marginStart="@dimen/condensedHorizontalMargin"/>
 
 </RelativeLayout>

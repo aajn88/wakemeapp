@@ -140,6 +140,12 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
 
   }
 
+  @Override
+  protected void onStop() {
+    super.onStop();
+    mAdapter.onStop();
+  }
+
   /**
    * Injection component. This should be done if there are fields to be injected
    *
