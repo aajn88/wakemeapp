@@ -26,3 +26,5 @@ In that way, the user will hear a different song everyday and, with some luck, w
 
 ## Downloads
 [<img src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" height="45px" />](https://play.google.com/store/apps/details?id=com.doers.wakemeapp)
+## Thanks
+I really want to thank to [Carlos Torres](https://github.com/carlosfelipetorres) for this amazing idea. Without him, I wouldn't be able to complete this app.
