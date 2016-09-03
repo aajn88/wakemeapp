@@ -33,3 +33,4 @@ build/
 
 # WakeMeApp private folders
 security/
+fabric.properties

@@ -7,9 +7,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -26,6 +29,7 @@ import com.doers.wakemeapp.business.services.api.IPlaylistsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
 import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.common.utils.DateUtils;
+import com.doers.wakemeapp.custom_views.common.Snackbar;
 import com.doers.wakemeapp.custom_views.common.TimePickerFragment;
 import com.doers.wakemeapp.custom_views.font.RobotoTextView;
 import com.doers.wakemeapp.di.WakeMeAppApplication;
@@ -71,6 +75,9 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
 
   /** List of available playlists **/
   private List<Playlist> mPlaylists;
+
+  /** Alarm deletion to be confirmed {@code Pair<Position, Alarm>} **/
+  private Pair<Integer, Alarm> mPendingDeletionConfirm;
 
   /**
    * Constructor
@@ -188,13 +195,20 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
       }
     });
 
+    vh.mTitleEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+          checkAndSaveAlarmTitle(vh, alarm);
+          return true;
+        }
+        return false;
+      }
+    });
     vh.mConfirmIv.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        alarm.setName(vh.mTitleEt.getText().toString().trim());
-        updateAlarm(vh.getAdapterPosition());
-        setUpTitle(vh, alarm);
-        showEditTitle(vh, false);
+        checkAndSaveAlarmTitle(vh, alarm);
       }
     });
     vh.mCancelIv.setOnClickListener(new View.OnClickListener() {
@@ -204,6 +218,26 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
       }
     });
 
+  }
+
+  /**
+   * This method checks and saves the current alarm title.
+   *
+   * @param vh
+   *         ViewHolder owner
+   * @param alarm
+   *         Target alarm
+   */
+  private void checkAndSaveAlarmTitle(AlarmHolder vh, Alarm alarm) {
+    String newTitle = vh.mTitleEt.getText().toString().trim();
+    if (newTitle.isEmpty()) {
+      Snackbar.make(vh.mTitleEt, R.string.empty_alarm_name, Snackbar.LENGTH_SHORT).show();
+      return;
+    }
+    alarm.setName(newTitle);
+    updateAlarm(vh.getAdapterPosition());
+    setUpTitle(vh, alarm);
+    showEditTitle(vh, false);
   }
 
   /**
@@ -387,10 +421,34 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
    * @param position
    *         Position to be deleted
    */
-  public void deleteAlarm(int position) {
+  public void partiallyDeleteAlarm(int position) {
+    confirmDeletion();
     Alarm alarm = mAlarms.remove(position);
-    mAlarmsService.deleteAlarm(alarm.getId());
     notifyItemRemoved(position);
+    mPendingDeletionConfirm = new Pair<>(position, alarm);
+  }
+
+  /**
+   * This method confirms the deletion transaction
+   */
+  public void cancelDeletion() {
+    if (mPendingDeletionConfirm == null) {
+      return;
+    }
+    mAlarms.add(mPendingDeletionConfirm.first, mPendingDeletionConfirm.second);
+    notifyItemInserted(mPendingDeletionConfirm.first);
+    mPendingDeletionConfirm = null;
+  }
+
+  /**
+   * This method confirms the pending deletion
+   */
+  public void confirmDeletion() {
+    if (mPendingDeletionConfirm == null) {
+      return;
+    }
+    mAlarmsService.deleteAlarm(mPendingDeletionConfirm.second.getId());
+    mPendingDeletionConfirm = null;
   }
 
   public void refreshAlarms() {

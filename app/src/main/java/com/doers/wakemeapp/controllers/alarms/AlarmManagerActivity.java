@@ -12,6 +12,7 @@ import com.doers.wakemeapp.business.services.api.IAlarmsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
 import com.doers.wakemeapp.controllers.common.BaseActivity;
 import com.doers.wakemeapp.controllers.playlists.PlaylistsManagerActivity;
+import com.doers.wakemeapp.custom_views.common.Snackbar;
 import com.doers.wakemeapp.custom_views.decorations.InitialSpaceItemDecoration;
 import com.doers.wakemeapp.di.components.DiComponent;
 import com.github.clans.fab.FloatingActionButton;
@@ -57,6 +58,22 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
   /** Alarms adapter **/
   private AlarmsAdapter mAdapter;
 
+  /**
+   * Callback for Snackbar undo
+   */
+  private final android.support.design.widget.Snackbar.Callback mCallback =
+          new android.support.design.widget.Snackbar.Callback() {
+            @Override
+            public void onDismissed(android.support.design.widget.Snackbar snackbar, int event) {
+              mAdapter.confirmDeletion();
+              checkAlarmsCount();
+            }
+
+            @Override
+            public void onShown(android.support.design.widget.Snackbar snackbar) {
+            }
+          };
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -75,6 +92,19 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
   protected void onResume() {
     super.onResume();
     mAdapter.refreshAlarms();
+    checkAlarmsCount();
+  }
+
+  /**
+   * This method checks the alarms count. If there are no alarms, then a message is displayed.
+   * Otherwise this message will kept hidden
+   */
+  private void checkAlarmsCount() {
+    if (mAdapter == null) {
+      return;
+    }
+
+    mNoAlarmsTv.setVisibility(mAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
   }
 
   /**
@@ -102,7 +132,12 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
 
               @Override
               public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                mAdapter.deleteAlarm(viewHolder.getAdapterPosition());
+                mAdapter.partiallyDeleteAlarm(viewHolder.getAdapterPosition());
+                Snackbar.make(mAlarmsRv, R.string.alarm_deleted, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.undo, AlarmManagerActivity.this)
+                        .setCallback(mCallback)
+                        .show();
+                checkAlarmsCount();
               }
             };
 
@@ -135,7 +170,11 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
         mAlarmsRv.scrollToPosition(mAdapter.getItemCount() - 1);
         mAlarmsFam.close(true);
         break;
+      case R.id.snackbar_action:
+        mAdapter.cancelDeletion();
+        break;
     }
+    checkAlarmsCount();
   }
 
   @Override

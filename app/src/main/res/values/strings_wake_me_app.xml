@@ -8,9 +8,11 @@
   <string name="ok">OK</string>
   <string name="cancel">Cancel</string>
   <string name="discard">Discard</string>
+  <string name="undo">Undo</string>
 
   <!-- Error messages -->
   <string name="mandatory_field">Don\'t forget this field</string>
+  <string name="empty_alarm_name">Please, add a name</string>
   <string name="empty_playlist_error">Please, add at least one song</string>
 
   <!-- Week days -->
@@ -35,6 +37,7 @@
   <string name="default_playlist_cannot_delete">Default playlist cannot be deleted</string>
   <string name="default_playlist_cannot_edit">Default playlist cannot be edited</string>
   <string name="playlist_deleted">Playlist successfully deleted</string>
+  <string name="alarm_deleted">Alarm successfully deleted</string>
 
   <!-- Add song -->
   <string name="no_songs">You have no songs. Add the first one!</string>
