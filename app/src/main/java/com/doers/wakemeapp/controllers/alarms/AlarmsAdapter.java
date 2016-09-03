@@ -8,9 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -193,18 +195,20 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
       }
     });
 
+    vh.mTitleEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        if (actionId == EditorInfo.IME_ACTION_GO) {
+          checkAndSaveAlarmTitle(vh, alarm);
+          return true;
+        }
+        return false;
+      }
+    });
     vh.mConfirmIv.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        String newTitle = vh.mTitleEt.getText().toString().trim();
-        if (newTitle.isEmpty()) {
-          Snackbar.make(view, R.string.empty_alarm_name, Snackbar.LENGTH_SHORT).show();
-          return;
-        }
-        alarm.setName(newTitle);
-        updateAlarm(vh.getAdapterPosition());
-        setUpTitle(vh, alarm);
-        showEditTitle(vh, false);
+        checkAndSaveAlarmTitle(vh, alarm);
       }
     });
     vh.mCancelIv.setOnClickListener(new View.OnClickListener() {
@@ -214,6 +218,26 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
       }
     });
 
+  }
+
+  /**
+   * This method checks and saves the current alarm title.
+   *
+   * @param vh
+   *         ViewHolder owner
+   * @param alarm
+   *         Target alarm
+   */
+  private void checkAndSaveAlarmTitle(AlarmHolder vh, Alarm alarm) {
+    String newTitle = vh.mTitleEt.getText().toString().trim();
+    if (newTitle.isEmpty()) {
+      Snackbar.make(vh.mTitleEt, R.string.empty_alarm_name, Snackbar.LENGTH_SHORT).show();
+      return;
+    }
+    alarm.setName(newTitle);
+    updateAlarm(vh.getAdapterPosition());
+    setUpTitle(vh, alarm);
+    showEditTitle(vh, false);
   }
 
   /**
@@ -405,10 +429,10 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
   }
 
   /**
-   *  This method confirms the deletion transaction
+   * This method confirms the deletion transaction
    */
   public void cancelDeletion() {
-    if(mPendingDeletionConfirm == null) {
+    if (mPendingDeletionConfirm == null) {
       return;
     }
     mAlarms.add(mPendingDeletionConfirm.first, mPendingDeletionConfirm.second);
@@ -420,7 +444,7 @@ public class AlarmsAdapter extends RecyclerView.Adapter {
    * This method confirms the pending deletion
    */
   public void confirmDeletion() {
-    if(mPendingDeletionConfirm == null) {
+    if (mPendingDeletionConfirm == null) {
       return;
     }
     mAlarmsService.deleteAlarm(mPendingDeletionConfirm.second.getId());
