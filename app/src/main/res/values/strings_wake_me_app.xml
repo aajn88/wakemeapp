@@ -2,7 +2,7 @@
 <resources>
 
   <!-- Generics -->
-  <string name="logo_description">Logo description</string>
+  <string name="logo_description">WakeMeApp logo</string>
   <string name="playlists">Playlists</string>
   <string name="save">Save</string>
   <string name="ok">OK</string>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "775300407040",
+    "firebase_url": "https://wakemeapp-d7ded.firebaseio.com",
+    "project_id": "wakemeapp-d7ded",
+    "storage_bucket": "wakemeapp-d7ded.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775300407040:android:a2f06e32da489098",
+        "android_client_info": {
+          "package_name": "com.doers.wakemeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775300407040-d4v5k80p0m8bniclradgknatn97ild6u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.doers.wakemeapp",
+            "certificate_hash": "3148A9440841C059546075C7BC26EB62EF0E17AA"
+          }
+        },
+        {
+          "client_id": "775300407040-7tracnq0d0pbi3f5o267erc5uavt31ac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXqK9-Ss7lTn1hjT83CZ8UhxIi-psVrCk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775300407040-7tracnq0d0pbi3f5o267erc5uavt31ac.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

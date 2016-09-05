@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.doers.wakemeapp.R;
+import com.doers.wakemeapp.business.services.api.IFirebaseAnalyticsService;
+import com.doers.wakemeapp.business.services.constants.FirebaseEvent;
 import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.custom_views.common.Snackbar;
 
@@ -32,6 +34,9 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
   /** Layout inflater **/
   private final LayoutInflater mInflater;
 
+  /** Firebase analytics services **/
+  private final IFirebaseAnalyticsService mFirebaseAnalyticsService;
+
   /**
    * Adapter's constructor
    *
@@ -40,7 +45,9 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
    * @param mPlaylists
    *         Playlists list
    */
-  public PlaylistsAdapter(Context context, List<Playlist> mPlaylists) {
+  public PlaylistsAdapter(Context context, List<Playlist> mPlaylists,
+                          IFirebaseAnalyticsService firebaseAnalyticsService) {
+    this.mFirebaseAnalyticsService = firebaseAnalyticsService;
     this.mPlaylists = mPlaylists;
     mContext = context;
     mInflater = LayoutInflater.from(context);
@@ -112,6 +119,7 @@ public class PlaylistsAdapter extends RecyclerView.Adapter {
         }
         AddPlaylistActivity.startActivity((Activity) mContext, playlist.getId(),
                 AddPlaylistActivity.EDIT_PLAYLIST_REQUEST_CODE);
+        mFirebaseAnalyticsService.logEvent(FirebaseEvent.UPDATE_PLAYLIST);
       }
     });
   }
