@@ -32,8 +32,8 @@ public class WakeMeAppApplication extends Application {
     EnvironmentUtils.setIsDebug(BuildConfig.DEBUG);
     if (!EnvironmentUtils.isDebug()) {
       Fabric.with(this, new Crashlytics());
+      mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
-    mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     component = DaggerDiComponent.builder().servicesModule(new ServicesModule(this))
             .managersModule(new ManagersModule(this)).build();
   }

@@ -3,12 +3,14 @@ package com.doers.wakemeapp.controllers.alarms;
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.IBinder;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -54,12 +56,6 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
   /** Snooze alarm **/
   private static final int SNOOZE_ALARM = 0;
 
-  /** Vibration Delay **/
-  private static final int VIBRATION_DELAY = 500;
-
-  /** Vibration pattern **/
-  private static final long[] PATTERN = {0, 200, 500};
-
   /** Alarm action GlowPadView **/
   @BindView(R.id.alarm_action_gpv)
   GlowPadView mAlarmActionGpv;
@@ -82,17 +78,32 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
   /** The alarm day **/
   private int mAlarmDay;
 
+  /** Formatted time **/
+  private String mFormattedTime;
+
+  /** Bound sound service **/
+  private ISoundService mSoundService;
+
   /** System vibrator **/
   private Vibrator mVibrator;
 
-  /** The alarm {@link MediaPlayer} **/
-  private MediaPlayer mAlarmMediaPlayer;
+  /** The current song to be played **/
+  private String mCurrentSong;
 
-  /** Must keep playing? **/
-  private boolean mKeepPlaying = false;
+  /** The service connection **/
+  private ServiceConnection mServiceConnection = new ServiceConnection() {
 
-  /** Formatted time **/
-  private String mFormattedTime;
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+      mSoundService = ((ISoundService.SoundBinder) iBinder).getService();
+      mSoundService.playSound(mCurrentAlarm.getId(), Uri.parse(mCurrentSong));
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName componentName) {
+      mSoundService = null;
+    }
+  };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +130,12 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
     mAlarmTimeRtv.setText(mFormattedTime);
 
     executeAlarm();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    unbindService(mServiceConnection);
   }
 
   /**
@@ -150,24 +167,20 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
     int randSong = new Random().nextInt(songs.size());
     Song selectedSong = songs.get(randSong);
     String songPath = selectedSong.getPath();
-    mKeepPlaying = true;
-    mAlarmMediaPlayer = MediaPlayer.create(this, Uri.parse(songPath));
-    if (mAlarmMediaPlayer != null) {
-      mAlarmMediaPlayer.setLooping(true);
-      mAlarmMediaPlayer.start();
-    }
-
-    new Handler().post(new Runnable() {
-      @Override
-      public void run() {
-        mVibrator.vibrate(PATTERN, -1);
-        if (mKeepPlaying) {
-          new Handler().postDelayed(this, VIBRATION_DELAY);
-        }
-      }
-    });
-
+    startSoundService(songPath);
     displayNotification();
+  }
+
+  /**
+   * This method initializes the sound service and binds it to the activity
+   *
+   * @param songPath
+   *         Song path to be played
+   */
+  private void startSoundService(final String songPath) {
+    Intent soundServiceIntent = new Intent(this, SoundService.class);
+    mCurrentSong = songPath;
+    bindService(soundServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
   }
 
   /**
@@ -222,10 +235,11 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
    * This method stops the playing music and the device vibrations
    */
   private void stopPlaying() {
-    mKeepPlaying = false;
-    if (mAlarmMediaPlayer != null && mAlarmMediaPlayer.isPlaying()) {
-      mAlarmMediaPlayer.stop();
+    if (mSoundService != null) {
+      mSoundService.stopSound(mCurrentAlarm.getId());
     }
+    mCurrentSong = null;
+
     // To make sure the alarm is always up to date
     mAlarmsService.setUpAlarm(mCurrentAlarm);
   }

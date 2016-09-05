@@ -48,7 +48,7 @@ public class FirebaseAnalyticsService implements IFirebaseAnalyticsService {
    * @return True if this is a valid environment
    */
   private boolean isValidEnvironment() {
-    return !EnvironmentUtils.isDebug();
+    return mFirebaseAnalytics != null && !EnvironmentUtils.isDebug();
   }
 
 }

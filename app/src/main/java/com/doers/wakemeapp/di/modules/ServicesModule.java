@@ -12,7 +12,6 @@ import com.doers.wakemeapp.di.WakeMeAppApplication;
 import com.doers.wakemeapp.persistence.managers.api.IAlarmsManager;
 import com.doers.wakemeapp.persistence.managers.api.IPlaylistsManager;
 import com.doers.wakemeapp.persistence.managers.api.ISongsManager;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import javax.inject.Singleton;
 
@@ -72,29 +71,16 @@ public class ServicesModule {
   /**
    * Bind of the {@link IFirebaseAnalyticsService} with its implementation
    *
-   * @param firebaseAnalytics
-   *         Firebase analytics instance
+   * @param context
+   *         Application context
    *
    * @return {@link IFirebaseAnalyticsService} instance
    */
   @Provides
   @Singleton
-  public IFirebaseAnalyticsService firebaseAnalyticsService(FirebaseAnalytics firebaseAnalytics) {
-    return new FirebaseAnalyticsService(firebaseAnalytics);
-  }
-
-  /**
-   * This method returns a firebase analytics instance
-   *
-   * @param context
-   *         Application context
-   *
-   * @return {@link FirebaseAnalytics} instance
-   */
-  @Provides
-  @Singleton
-  public FirebaseAnalytics getFirebaseAnalytics(Context context) {
-    return ((WakeMeAppApplication) context).getFirebaseAnalyticsInstance();
+  public IFirebaseAnalyticsService firebaseAnalyticsService(Context context) {
+    return new FirebaseAnalyticsService(
+            ((WakeMeAppApplication) context).getFirebaseAnalyticsInstance());
   }
 
   /**
