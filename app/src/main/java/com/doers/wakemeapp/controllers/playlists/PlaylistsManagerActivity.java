@@ -11,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.doers.wakemeapp.R;
+import com.doers.wakemeapp.business.services.api.IFirebaseAnalyticsService;
 import com.doers.wakemeapp.business.services.api.IPlaylistsService;
+import com.doers.wakemeapp.business.services.constants.FirebaseEvent;
 import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.controllers.common.BaseActivity;
 import com.doers.wakemeapp.custom_views.common.Snackbar;
@@ -46,6 +48,10 @@ public class PlaylistsManagerActivity extends BaseActivity implements View.OnCli
 
   /** The playlists adapter **/
   private PlaylistsAdapter mAdapter;
+
+  /** FirebaseAnalyticsService **/
+  @Inject
+  IFirebaseAnalyticsService mFirebaseAnalyticsService;
 
   /**
    * This method starts Playlists Manager Activity given a context
@@ -97,7 +103,8 @@ public class PlaylistsManagerActivity extends BaseActivity implements View.OnCli
    * This method loads the stored playlists
    */
   private void loadPlaylists() {
-    mAdapter = new PlaylistsAdapter(this, mPlaylistsService.getAllPlaylists());
+    mAdapter = new PlaylistsAdapter(this, mPlaylistsService.getAllPlaylists(),
+            mFirebaseAnalyticsService);
     mPlaylistsRv.setAdapter(mAdapter);
   }
 
@@ -139,6 +146,7 @@ public class PlaylistsManagerActivity extends BaseActivity implements View.OnCli
     switch (view.getId()) {
       case R.id.add_playlist_fab:
         AddPlaylistActivity.startActivity(this, ADD_PLAYLIST_REQUEST_CODE);
+        mFirebaseAnalyticsService.logEvent(FirebaseEvent.CREATE_PLAYLIST);
         break;
     }
   }

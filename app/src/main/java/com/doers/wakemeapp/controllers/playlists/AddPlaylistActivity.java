@@ -20,7 +20,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.doers.wakemeapp.R;
+import com.doers.wakemeapp.business.services.api.IFirebaseAnalyticsService;
 import com.doers.wakemeapp.business.services.api.IPlaylistsService;
+import com.doers.wakemeapp.business.services.constants.FirebaseEvent;
 import com.doers.wakemeapp.business.utils.IOUtils;
 import com.doers.wakemeapp.common.model.audio.Playlist;
 import com.doers.wakemeapp.common.model.audio.Song;
@@ -196,11 +198,17 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
 
     String playlistName = mPlaylistNameEt.getText().toString();
     List<Song> songs = mAdapter.getSongs();
+    Bundle extras = new Bundle();
+    extras.putInt(IFirebaseAnalyticsService.Extra.NUMBER_OF_ITEMS, songs.size());
+
     if (mPlaylist != null) {
       mPlaylistsService.updatePlaylist(mPlaylist.getId(), playlistName, songs);
+      mFirebaseAnalyticsService.logEvent(FirebaseEvent.PLAYLIST_UPDATED, extras);
     } else {
       mPlaylistsService.createPlaylist(playlistName, songs);
+      mFirebaseAnalyticsService.logEvent(FirebaseEvent.PLAYLIST_CREATED, extras);
     }
+
     setResult(RESULT_OK);
     finish();
   }

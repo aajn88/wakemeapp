@@ -10,11 +10,16 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.view.Menu;
+import android.view.MenuItem;
+
 import com.doers.wakemeapp.R;
+import com.doers.wakemeapp.business.services.api.IFirebaseAnalyticsService;
+import com.doers.wakemeapp.business.services.constants.FirebaseEvent;
 import com.doers.wakemeapp.di.WakeMeAppApplication;
 import com.doers.wakemeapp.di.components.DiComponent;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +35,10 @@ public abstract class BaseActivity extends AppCompatActivity {
   @BindView(R.id.toolbar)
   @Nullable
   protected Toolbar mToolbar;
+
+  /** Firebase analytics service **/
+  @Inject
+  protected IFirebaseAnalyticsService mFirebaseAnalyticsService;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,14 @@ public abstract class BaseActivity extends AppCompatActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_base, menu);
     return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == R.id.logo_item) {
+      mFirebaseAnalyticsService.logEvent(FirebaseEvent.TOOLBAR_WAKE_ME_APP_ICON_CLICKED);
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   /**

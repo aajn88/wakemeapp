@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.business.services.api.IAlarmsService;
+import com.doers.wakemeapp.business.services.constants.FirebaseEvent;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
 import com.doers.wakemeapp.controllers.common.BaseActivity;
 import com.doers.wakemeapp.controllers.playlists.PlaylistsManagerActivity;
@@ -164,17 +165,28 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
         mAlarmsFam.close(true);
         break;
       case R.id.add_alarm_fab:
+        addAlarm();
+        mFirebaseAnalyticsService.logEvent(FirebaseEvent.CREATE_ALARM_CLICKING_FAB);
+        break;
       case R.id.no_alarms_tv:
-        mAdapter.addAlarm();
-        mNoAlarmsTv.setVisibility(View.GONE);
-        mAlarmsRv.scrollToPosition(mAdapter.getItemCount() - 1);
-        mAlarmsFam.close(true);
+        addAlarm();
+        mFirebaseAnalyticsService.logEvent(FirebaseEvent.CREATE_ALARM_CLICKING_TEXT);
         break;
       case R.id.snackbar_action:
         mAdapter.cancelDeletion();
         break;
     }
     checkAlarmsCount();
+  }
+
+  /**
+   * This method adds an alarm
+   */
+  private void addAlarm() {
+    mAdapter.addAlarm();
+    mNoAlarmsTv.setVisibility(View.GONE);
+    mAlarmsRv.scrollToPosition(mAdapter.getItemCount() - 1);
+    mAlarmsFam.close(true);
   }
 
   @Override
