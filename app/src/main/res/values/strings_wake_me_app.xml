@@ -43,5 +43,8 @@
   <string name="no_songs">You have no songs. Add the first one!</string>
   <string name="type_song_title">Type song\'s title</string>
 
+  <!-- Launch Alarm -->
+  <string name="stop">Stop</string>
+  <string name="snooze">Snooze</string>
 
 </resources>
