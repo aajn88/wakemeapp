@@ -43,5 +43,9 @@
   <string name="no_songs">No tienes canciones. ¡Añade la primera!</string>
   <string name="type_song_title">Escribe el título de la canción</string>
 
+  <!-- Launch Alarm -->
+  <string name="stop">Detener</string>
+  <string name="snooze">Postponer</string>
+
 
 </resources>
