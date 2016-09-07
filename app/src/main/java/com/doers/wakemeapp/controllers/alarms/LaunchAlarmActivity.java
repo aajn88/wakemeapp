@@ -3,9 +3,11 @@ package com.doers.wakemeapp.controllers.alarms;
 import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -24,7 +26,6 @@ import com.doers.wakemeapp.business.services.api.IAlarmsService;
 import com.doers.wakemeapp.common.model.alarms.Alarm;
 import com.doers.wakemeapp.common.model.audio.Song;
 import com.doers.wakemeapp.common.utils.DateUtils;
-import com.doers.wakemeapp.controllers.MainActivity;
 import com.doers.wakemeapp.controllers.common.BaseActivity;
 import com.doers.wakemeapp.di.components.DiComponent;
 import com.doers.wakemeapp.utils.DeviceUtils;
@@ -49,6 +50,12 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
 
   /** Tag for logs **/
   private static final String TAG = LaunchAlarmActivity.class.getSimpleName();
+
+  /** Stop alarm action **/
+  private static final String STOP_ALARM_ACTION = "STOP_ALARM_ACTION";
+
+  /** Snooze alarm action **/
+  private static final String SNOOZE_ALARM_ACTION = "SNOOZE_ALARM_ACTION";
 
   /** Stop alarm **/
   private static final int STOP_ALARM = 2;
@@ -90,6 +97,9 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
   /** The current song to be played **/
   private String mCurrentSong;
 
+  /** Notification manager **/
+  private NotificationManager mNotificationManager;
+
   /** The service connection **/
   private ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -102,6 +112,25 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
       mSoundService = null;
+    }
+  };
+
+  /** Notification broadcast receiver **/
+  private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      int alarmId = intent.getIntExtra(IAlarmsService.ALARM_ID, -1);
+      if (alarmId == -1 || alarmId != mCurrentAlarm.getId()) {
+        return;
+      }
+      switch (intent.getAction()) {
+        case STOP_ALARM_ACTION:
+          processAction(STOP_ALARM);
+          break;
+        case SNOOZE_ALARM_ACTION:
+          processAction(SNOOZE_ALARM);
+          break;
+      }
     }
   };
 
@@ -130,11 +159,23 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
     mAlarmTimeRtv.setText(mFormattedTime);
 
     executeAlarm();
+    registerReceiver();
+  }
+
+  /**
+   * This method registers the receiver for the notification actions
+   */
+  private void registerReceiver() {
+    IntentFilter stopIntentFilter = new IntentFilter(STOP_ALARM_ACTION);
+    IntentFilter snoozeIntentFilter = new IntentFilter(STOP_ALARM_ACTION);
+    registerReceiver(mNotificationReceiver, stopIntentFilter);
+    registerReceiver(mNotificationReceiver, snoozeIntentFilter);
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
+    unregisterReceiver(mNotificationReceiver);
     unbindService(mServiceConnection);
   }
 
@@ -168,7 +209,7 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
     Song selectedSong = songs.get(randSong);
     String songPath = selectedSong.getPath();
     startSoundService(songPath);
-    displayNotification();
+    displayNotification(false);
   }
 
   /**
@@ -185,19 +226,51 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
 
   /**
    * This method displays the notification in the status bar
+   *
+   * @param isPostAlarm
+   *         Indicates if the notification is shown after alarm snooze/stop
    */
-  private void displayNotification() {
+  private void displayNotification(boolean isPostAlarm) {
     NotificationCompat.Builder builder =
             new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_alarm)
                     .setContentTitle(mCurrentAlarm.getName())
                     .setContentText(mFormattedTime)
-                    .setAutoCancel(true);
-    Intent homeIntent = new Intent(this, MainActivity.class);
-    PendingIntent homePendingIntent =
-            PendingIntent.getActivity(this, 0, homeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-    builder.setContentIntent(homePendingIntent);
-    NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-    nm.notify(mCurrentAlarm.getId(), builder.build());
+                    .setAutoCancel(true)
+                    .setOngoing(!isPostAlarm);
+    if (!isPostAlarm) {
+      addNotificationActions(builder);
+    }
+    mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    mNotificationManager.notify(mCurrentAlarm.getId(), builder.build());
+  }
+
+  /**
+   * This method adds the notification actions, i.e., Stop alarm and Snooze alarm
+   *
+   * @param builder
+   *         Notification builder
+   */
+  private void addNotificationActions(NotificationCompat.Builder builder) {
+    PendingIntent stopPendingIntent = buildPendingIntent(STOP_ALARM_ACTION);
+    PendingIntent snoozePendingIntent = buildPendingIntent(SNOOZE_ALARM_ACTION);
+    builder.addAction(R.drawable.ic_alarm_off_white, getString(R.string.stop),
+            stopPendingIntent);
+    builder.addAction(R.drawable.ic_snooze_white, getString(R.string.snooze),
+            snoozePendingIntent);
+  }
+
+  /**
+   * This method builds the pending intent given an action
+   *
+   * @param action
+   *         Action to be executed
+   *
+   * @return The pending intent
+   */
+  private PendingIntent buildPendingIntent(String action) {
+    Intent intent = new Intent(action);
+    intent.putExtra(IAlarmsService.ALARM_ID, mCurrentAlarm.getId());
+    return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
   /**
@@ -229,6 +302,7 @@ public class LaunchAlarmActivity extends BaseActivity implements GlowPadView.OnT
         break;
     }
     stopPlaying();
+    displayNotification(true);
   }
 
   /**
