@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <group android:checkableBehavior="single">
+    <item
+      android:id="@+id/my_alarms_item"
+      android:icon="@drawable/ic_alarm"
+      android:title="@string/my_alarms"/>
+    <item
+      android:id="@+id/my_playlists_item"
+      android:icon="@drawable/ic_playlist"
+      android:title="@string/my_playlists"/>
+  </group>
+
+  <item android:title="@string/settings">
+    <menu>
+      <item
+        android:id="@+id/log_out_item"
+        android:icon="@drawable/ic_log_out"
+        android:title="@string/log_out"/>
+      <item
+        android:id="@+id/about_item"
+        android:icon="@drawable/ic_about"
+        android:title="@string/about"/>
+    </menu>
+  </item>
+
+</menu>

@@ -47,5 +47,14 @@
   <string name="stop">Detener</string>
   <string name="snooze">Postponer</string>
 
+  <!-- Drawer menu -->
+  <string name="my_alarms">Mis alarmas</string>
+  <string name="my_playlists">Mis listas de reproducción</string>
+  <string name="settings">Configuración</string>
+  <string name="log_out">Cerrar sesión</string>
+  <string name="about">Acerca</string>
+  <string name="navigation_drawer_open">Abrir navigation drawer</string>
+  <string name="navigation_drawer_close">Cerrar navigation drawer</string>
+
 
 </resources>
