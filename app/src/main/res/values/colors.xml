@@ -2,6 +2,10 @@
 <resources>
   <color name="colorPrimary">@color/material_blue_500</color>
   <color name="colorPrimaryDark">@color/material_blue_700</color>
+  <color name="colorPrimaryLight">@color/material_blue_300</color>
   <color name="colorAccent">@color/material_deep_purple_A200</color>
   <color name="colorAccentA100">@color/material_deep_purple_A100</color>
+
+  <color name="spotifyColor">#1ED760</color>
+
 </resources>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@drawable/side_nav_bar"
+  android:gravity="bottom"
+  android:minHeight="@dimen/min_drawer_header_height"
+  android:orientation="vertical"
+  android:paddingBottom="@dimen/standardVerticalMargin"
+  android:paddingLeft="@dimen/standardHorizontalMargin"
+  android:paddingRight="@dimen/standardHorizontalMargin"
+  android:paddingTop="@dimen/standardVerticalMargin"
+  android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+  <ImageView
+    android:id="@+id/user_avatar_iv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/user_avatar_description"
+    android:paddingBottom="@dimen/standardVerticalMargin"
+    android:paddingTop="@dimen/standardVerticalMargin"
+    android:src="@drawable/ic_logo"/>
+
+  <com.doers.wakemeapp.custom_views.font.RobotoTextView
+    android:id="@+id/user_name_tv"
+    style="@style/Body1Style"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/guest_user"
+    android:textColor="@color/white"/>
+
+  <com.doers.wakemeapp.custom_views.font.RobotoTextView
+    android:id="@+id/user_email_tv"
+    style="@style/CaptionStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="user.email@android.com"
+    android:textColor="@color/white"/>
+
+  <Button
+    android:id="@+id/spotify_login_btn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/standardHorizontalMargin"
+    android:layout_marginRight="@dimen/standardHorizontalMargin"
+    android:drawableStart="@drawable/ic_spotify"
+    android:text="@string/spotify_login"
+    android:textColor="@color/white"
+    android:theme="@style/ThemeSpotify"/>
+
+</LinearLayout>

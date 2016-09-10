@@ -3,6 +3,7 @@
 
   <!-- Generics -->
   <string name="logo_description">WakeMeApp logo</string>
+  <string name="user_avatar_description">Avatar del usuario</string>
   <string name="playlists">Listas de reproducción</string>
   <string name="save">Guardar</string>
   <string name="ok">OK</string>
@@ -47,5 +48,14 @@
   <string name="stop">Detener</string>
   <string name="snooze">Postponer</string>
 
+  <!-- Drawer -->
+  <string name="guest_user">Usuario invitado</string>
+  <string name="my_alarms">Mis alarmas</string>
+  <string name="my_playlists">Mis listas de reproducción</string>
+  <string name="settings">Configuración</string>
+  <string name="log_out">Cerrar sesión</string>
+  <string name="about">Acerca</string>
+  <string name="navigation_drawer_open">Abrir navigation drawer</string>
+  <string name="navigation_drawer_close">Cerrar navigation drawer</string>
 
 </resources>

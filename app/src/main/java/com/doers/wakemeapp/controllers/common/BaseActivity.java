@@ -5,17 +5,25 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.business.services.api.IFirebaseAnalyticsService;
 import com.doers.wakemeapp.business.services.constants.FirebaseEvent;
+import com.doers.wakemeapp.controllers.alarms.AlarmManagerActivity;
+import com.doers.wakemeapp.controllers.playlists.PlaylistsManagerActivity;
 import com.doers.wakemeapp.di.WakeMeAppApplication;
 import com.doers.wakemeapp.di.components.DiComponent;
 
@@ -29,12 +37,23 @@ import butterknife.ButterKnife;
  *
  * @author <a href="mailto:aajn88@gmail.com">Antonio Jimenez</a>
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
   /** Toolbar **/
   @BindView(R.id.toolbar)
   @Nullable
   protected Toolbar mToolbar;
+
+  /** Drawer layout **/
+  @BindView(R.id.drawer_layout)
+  @Nullable
+  protected DrawerLayout mDrawerLayout;
+
+  /** Navigation view **/
+  @BindView(R.id.navigation_view)
+  @Nullable
+  protected NavigationView mNavigationView;
 
   /** Firebase analytics service **/
   @Inject
@@ -50,9 +69,41 @@ public abstract class BaseActivity extends AppCompatActivity {
   public void setContentView(@LayoutRes int layoutResID) {
     super.setContentView(layoutResID);
     ButterKnife.bind(this);
+    setUpActionBar();
+  }
+
+  /**
+   * This method sets up the action bar and the navigation drawer
+   */
+  private void setUpActionBar() {
     if (mToolbar != null) {
       setSupportActionBar(mToolbar);
     }
+    if (mNavigationView == null || mDrawerLayout == null) {
+      return;
+    }
+
+    initDrawerHeader();
+
+    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+            this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close);
+    mDrawerLayout.addDrawerListener(toggle);
+    toggle.syncState();
+
+    mNavigationView.setNavigationItemSelectedListener(this);
+  }
+
+  /**
+   * This method initializes the drawer header
+   */
+  private void initDrawerHeader() {
+    if (mNavigationView == null) {
+      return;
+    }
+    View headerView =
+            getLayoutInflater().inflate(R.layout.nav_header_drawer, mNavigationView, false);
+    mNavigationView.addHeaderView(headerView);
   }
 
   @Override
@@ -119,4 +170,24 @@ public abstract class BaseActivity extends AppCompatActivity {
     alert.show();
   }
 
+  @Override
+  public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+    switch (item.getItemId()) {
+      case R.id.my_alarms_item:
+        AlarmManagerActivity.startActivity(this);
+        break;
+      case R.id.my_playlists_item:
+        PlaylistsManagerActivity.startActivity(this);
+        break;
+      case R.id.log_out_item:
+        break;
+      case R.id.about_item:
+        break;
+    }
+
+    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    drawer.closeDrawer(GravityCompat.START);
+    return true;
+  }
 }

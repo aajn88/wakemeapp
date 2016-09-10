@@ -3,6 +3,7 @@
 
   <!-- Generics -->
   <string name="logo_description">WakeMeApp logo</string>
+  <string name="user_avatar_description">User\'s avatar</string>
   <string name="playlists">Playlists</string>
   <string name="save">Save</string>
   <string name="ok">OK</string>
@@ -46,5 +47,18 @@
   <!-- Launch Alarm -->
   <string name="stop">Stop</string>
   <string name="snooze">Snooze</string>
+
+  <!-- Drawer -->
+  <string name="guest_user">Guest user</string>
+  <string name="my_alarms">My alarms</string>
+  <string name="my_playlists">My playlists</string>
+  <string name="settings">Settings</string>
+  <string name="log_out">Log out</string>
+  <string name="about">About</string>
+  <string name="navigation_drawer_open">Open navigation drawer</string>
+  <string name="navigation_drawer_close">Close navigation drawer</string>
+
+  <!-- Login -->
+  <string name="spotify_login">Login using Spotify</string>
 
 </resources>

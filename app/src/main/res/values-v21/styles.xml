@@ -8,6 +8,7 @@
     <item name="actionBarElevation">@dimen/actionBarElevation</item>
     <item name="cardRestingElevation">@dimen/cardRestingElevation</item>
     <item name="cardRaisedElevation">@dimen/cardRaisedElevation</item>
+
   </style>
 
   <style name="ButtonStyle" parent="@android:style/Widget.Material.Button">
@@ -32,6 +33,10 @@
 
   <style name="CardViewTheme" parent="CardView">
     <item name="cardElevation">?attr/cardRestingElevation</item>
+  </style>
+
+  <style name="Button.Colored.Spotify" parent="Widget.AppCompat.Button.Colored">
+    <item name="android:colorAccent">@color/spotifyColor</item>
   </style>
 
 </resources>
