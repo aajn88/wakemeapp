@@ -17,10 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.doers.wakemeapp.R;
 import com.doers.wakemeapp.business.services.api.IFirebaseAnalyticsService;
 import com.doers.wakemeapp.business.services.constants.FirebaseEvent;
+import com.doers.wakemeapp.controllers.alarms.AlarmManagerActivity;
+import com.doers.wakemeapp.controllers.playlists.PlaylistsManagerActivity;
 import com.doers.wakemeapp.di.WakeMeAppApplication;
 import com.doers.wakemeapp.di.components.DiComponent;
 
@@ -80,6 +83,8 @@ public abstract class BaseActivity extends AppCompatActivity
       return;
     }
 
+    initDrawerHeader();
+
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open,
             R.string.navigation_drawer_close);
@@ -87,6 +92,18 @@ public abstract class BaseActivity extends AppCompatActivity
     toggle.syncState();
 
     mNavigationView.setNavigationItemSelectedListener(this);
+  }
+
+  /**
+   * This method initializes the drawer header
+   */
+  private void initDrawerHeader() {
+    if (mNavigationView == null) {
+      return;
+    }
+    View headerView =
+            getLayoutInflater().inflate(R.layout.nav_header_drawer, mNavigationView, false);
+    mNavigationView.addHeaderView(headerView);
   }
 
   @Override
@@ -158,8 +175,10 @@ public abstract class BaseActivity extends AppCompatActivity
 
     switch (item.getItemId()) {
       case R.id.my_alarms_item:
+        AlarmManagerActivity.startActivity(this);
         break;
       case R.id.my_playlists_item:
+        PlaylistsManagerActivity.startActivity(this);
         break;
       case R.id.log_out_item:
         break;

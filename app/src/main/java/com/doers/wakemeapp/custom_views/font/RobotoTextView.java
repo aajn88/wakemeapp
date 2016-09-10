@@ -129,6 +129,9 @@ public class RobotoTextView extends TextView {
   }
 
   private void parseAttributes(AttributeSet attrs) {
+    if (isInEditMode()) {
+      return;
+    }
     int typeface;
     if (attrs == null) { //Not created from xml
       typeface = Roboto.ROBOTO_REGULAR;

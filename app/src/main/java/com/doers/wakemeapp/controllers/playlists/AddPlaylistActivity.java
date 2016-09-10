@@ -185,6 +185,7 @@ public class AddPlaylistActivity extends BaseActivity implements View.OnClickLis
    * This method confirms the exit
    */
   private void confirmExit() {
+    setResult(RESULT_CANCELED);
     confirmExit(this, null, R.string.discard_playlist_msg, R.string.discard);
   }
 

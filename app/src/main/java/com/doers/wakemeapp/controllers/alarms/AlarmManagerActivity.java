@@ -1,5 +1,7 @@
 package com.doers.wakemeapp.controllers.alarms;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -74,6 +76,17 @@ public class AlarmManagerActivity extends BaseActivity implements View.OnClickLi
             public void onShown(android.support.design.widget.Snackbar snackbar) {
             }
           };
+
+  /**
+   * This method starts the current activity
+   *
+   * @param context
+   *         Current context
+   */
+  public static void startActivity(Context context) {
+    Intent intent = new Intent(context, AlarmManagerActivity.class);
+    context.startActivity(intent);
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

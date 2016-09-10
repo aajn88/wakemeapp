@@ -79,4 +79,8 @@
     <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
   </style>
 
+  <style name="ThemeSpotify" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorButtonNormal">@color/spotifyColor</item>
+  </style>
+
 </resources>
